@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import com.imbuegen.staffapp.R;
 
 public class NotificationFragment extends Fragment {
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -23,5 +25,29 @@ public class NotificationFragment extends Fragment {
 
 
 
-    public class notification
+    public class notiAdapter extends RecyclerView.Adapter<notiAdapter.myViewHolder>{
+
+        @NonNull
+        @Override
+        public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull myViewHolder myViewHolder, int i) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
+
+        public class myViewHolder extends RecyclerView.ViewHolder{
+
+            public myViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+    }
 }

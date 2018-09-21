@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.HomeFragment;
+import com.imbuegen.staffapp.fragments.NotificationFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,15 +45,23 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
+            FragmentTransaction ft =fragmentManager.beginTransaction();
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
-                   // menuItem.setCheckable(true);
+                   Fragment home=new HomeFragment();
+
+                   ft.replace(R.id.fragment_placeholder,home);
+                   ft.commit();
                     Toast.makeText(MainActivity.this, "you clicked home", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.nav_events:
                     Toast.makeText(MainActivity.this, "you clicked events", Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.nav_notification:
+                    Fragment Notification=new NotificationFragment();
+
+                    ft.replace(R.id.fragment_placeholder,Notification);
+                    ft.commit();
                     Toast.makeText(MainActivity.this, "you clicked notifications", Toast.LENGTH_SHORT).show();
                     return true;
             }
