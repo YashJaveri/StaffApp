@@ -1,34 +1,38 @@
 package com.imbuegen.staffapp.JavaObjects;
 
+import java.util.ArrayList;
+
 public class PostObject {
     private String id;
     private String content;
-    private LikesObject likeObj;
-    private DisLikesObject disLikeObj;
-    private String comment;
+    private UserObject user;
 
-    public LikesObject getLikeObj() {
+    public ArrayList<LikesObject> getLikeObj() {
         return likeObj;
     }
 
-    public void setLikeObj(LikesObject likeObj) {
+    public void setLikeObj(ArrayList<LikesObject> likeObj) {
         this.likeObj = likeObj;
     }
 
-    public DisLikesObject getDisLikeObj() {
+    public ArrayList<DisLikesObject> getDisLikeObj() {
         return disLikeObj;
     }
 
-    public void setDisLikeObj(DisLikesObject disLikeObj) {
+    public void setDisLikeObj(ArrayList<DisLikesObject> disLikeObj) {
         this.disLikeObj = disLikeObj;
     }
 
-    public String getComment() {
-        return comment;
+    private ArrayList<LikesObject> likeObj;
+    private ArrayList<DisLikesObject> disLikeObj;
+    private ArrayList<CommentsObject> comments;
+
+    public ArrayList<CommentsObject> getComment() {
+        return comments;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setComment(ArrayList<CommentsObject> comment) {
+        this.comments = comment;
     }
 
     public String getId() {
@@ -45,5 +49,13 @@ public class PostObject {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public UserObject getUser() {
+        return user;
+    }
+
+    public void setUser(UserObject user) {
+        this.user = user;
     }
 }
