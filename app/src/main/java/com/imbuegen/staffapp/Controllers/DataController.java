@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.io.Console;
 import java.util.ArrayList;
 
-public class DataController{
+public class DataController {
     //Other
     private Context context;
     private Gson mGson;
@@ -40,39 +40,56 @@ public class DataController{
     private ArrayList<DisLikesObject> disLikesObjs;
     private ArrayList<CommentsObject> commentsObjs;
     //Web
-  //  private RestClass restClass;
+    //  private RestClass restClass;
 
     public DataController(Context context) {
         this.context = context;
     }
 
-    public UserObject requestCurrentUser() throws JSONException {
-        restClassGetter();
+    public void onCreate(){
+        rc = new RestClass(context);
         rc.onCreate();
-        rc.getUser(Constants.CURRENT_USER);
-        JSONObject mainJSonObject = new JSONObject(jsonString);
-
-        return  jsonToUser(mainJSonObject);
     }
 
-    public void deletePost(String id){
-        rc = new RestClass(context, new RestClass.RestListner() {
+    public UserObject requestCurrentUser() throws JSONException {
+
+        rc.getUser(new RestClass.RestListner() {
             @Override
-            public void onComplete(String json, String code) {
-                //do nothing
-                Log.e(TAG, "onComplete: listener");
+            public void onComplete(String _jsonString) {
+                jsonString = _jsonString;
             }
         });
-        rc.onCreate();
+        JSONObject mainJSonObject = new JSONObject(jsonString);
 
-        rc.deletePost(id, Constants.DELETE_POST);
+        return jsonToUser(mainJSonObject);
+    }
+    public void deletePost(String id) {
+        rc.deletePost(id, new RestClass.RestListner() {
+            @Override
+            public void onComplete(String _jsonString) {
+                jsonString = _jsonString;
+            }
+        });
+    }
+
+    public void updatePost(String _id, String content){
+        rc.updatePost(_id, content);
+    }
+
+    public void  newPost(String content){
+        rc.newPost(content);
     }
 
     public ArrayList<PostObject> requestPosts(int id) {
-        restClassGetter();
 
-        rc.onCreate();
-        rc.getPosts(id, Constants.POST_LIST);
+
+        rc.getPosts(id, new RestClass.RestListner() {
+            @Override
+            public void onComplete(String _jsonString) {
+                jsonString = _jsonString;
+            }
+        });
+
         JSONArray mainJsonArray = null;
         try {
             mainJsonArray = new JSONArray(jsonString);
@@ -81,7 +98,7 @@ public class DataController{
         }
         if (mainJsonArray != null) {
             ArrayList<PostObject> postObjects = new ArrayList<>();
-            for (int i=0; i < mainJsonArray.length(); i++){
+            for (int i = 0; i < mainJsonArray.length(); i++) {
                 JSONObject jsonObject = null;
                 PostObject postObject = new PostObject();
                 try {
@@ -100,25 +117,39 @@ public class DataController{
         }
         return posts;
     }
- /*   public ArrayList<LikesObject> requestLikesObjs(String _id) throws JSONException {
-        restClassGetter();
 
-        rc.likePost(_id, Constants.POST_LIST);
-        JSONArray mainJsonArray = null;
-        mainJsonArray = new JSONArray(jsonString);
-        return jsonToLikeObj(mainJsonArray);
+    public void like(String _id){
+        rc.likePost(_id);
+    }
+    public void dislike(String _id){
+        rc.dislikePost(_id);
+    }
+    public void undoLike(String _id){
+        rc.undoLike(_id);
+    }
+    public void undoDislike(String _id){
+        rc.undoDislike(_id);
     }
 
-    public ArrayList<DisLikesObject> requestDisLikesObjs(int _id) {
-        return disLikesObjs;
-    }
+    /*   public ArrayList<LikesObject> requestLikesObjs(String _id) throws JSONException {
+           restClassGetter();
 
-    public ArrayList<CommentsObject> requestCommentsObjs(int _id) {
-        return commentsObjs;
-    }*/
-    private ArrayList<DisLikesObject> jsonToDislikeObj(JSONArray jsonArray){
+           rc.likePost(_id, Constants.POST_LIST);
+           JSONArray mainJsonArray = null;
+           mainJsonArray = new JSONArray(jsonString);
+           return jsonToLikeObj(mainJsonArray);
+       }
+
+       public ArrayList<DisLikesObject> requestDisLikesObjs(int _id) {
+           return disLikesObjs;
+       }
+
+       public ArrayList<CommentsObject> requestCommentsObjs(int _id) {
+           return commentsObjs;
+       }*/
+    private ArrayList<DisLikesObject> jsonToDislikeObj(JSONArray jsonArray) {
         ArrayList<DisLikesObject> _dislikeObjects = new ArrayList<>();
-        for (int i=0; i<jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 DisLikesObject disLikesObj = new DisLikesObject(jsonArray.getJSONObject(i).getInt("employId"));
                 _dislikeObjects.add(disLikesObj);
@@ -129,9 +160,9 @@ public class DataController{
         return _dislikeObjects;
     }
 
-    private ArrayList<LikesObject> jsonToLikeObj(JSONArray jsonArray){
+    private ArrayList<LikesObject> jsonToLikeObj(JSONArray jsonArray) {
         ArrayList<LikesObject> _likeObjects = new ArrayList<>();
-        for (int i=0; i<jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 LikesObject likesObject = new LikesObject(jsonArray.getJSONObject(i).getInt("employId"));
                 _likeObjects.add(likesObject);
@@ -142,11 +173,11 @@ public class DataController{
         return _likeObjects;
     }
 
-    private ArrayList<CommentsObject> jsonToCommentObjs(JSONArray jsonArray){
+    private ArrayList<CommentsObject> jsonToCommentObjs(JSONArray jsonArray) {
         ArrayList<CommentsObject> _commentObjs = new ArrayList<>();
-        for (int i=0; i<jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
-                CommentsObject commentsObject = new CommentsObject(jsonToUser(jsonArray.getJSONObject(i).getJSONObject("user")),jsonArray.getJSONObject(i).getString("message"));
+                CommentsObject commentsObject = new CommentsObject(jsonToUser(jsonArray.getJSONObject(i).getJSONObject("user")), jsonArray.getJSONObject(i).getString("message"));
                 _commentObjs.add(commentsObject);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -165,7 +196,7 @@ public class DataController{
         userObject.setDOB(_jsonObject.getString("DOB"));
         userObject.setDepartment(_jsonObject.getString("department"));
         ArrayList<String> familyemailsArray = new ArrayList<>();
-        for(int i=0; i<_jsonObject.getString("familyEmails").length(); i++)
+        for (int i = 0; i < _jsonObject.getString("familyEmails").length(); i++)
             familyemailsArray.add(_jsonObject.getJSONArray("familyEmails").get(i).toString());
         userObject.setFamilyEmails(familyemailsArray);
         userObject.setJoiningDate(_jsonObject.getString("joiningDate"));
@@ -174,14 +205,5 @@ public class DataController{
         userObject.setposition(_jsonObject.getString("position"));
 
         return userObject;
-    }
-
-    private void restClassGetter() {
-        rc = new RestClass(context, new RestClass.RestListner() {
-            @Override
-            public void onComplete(String json, String code) {
-                jsonString = json;
-            }
-        });
     }
 }

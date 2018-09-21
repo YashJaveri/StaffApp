@@ -1,60 +1,39 @@
 package com.imbuegen.staffapp;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import cz.msebera.android.httpclient.Header;
 
 public class RestClass {
-    //Other
-    StringBuilder sb;
     private Context context;
-    private GetTypeAsyncTask getTypeAsyncTask;
-    private PostTypeAsyncTask postTypeAsyncTask;
     //SF:
     private SharedPreferences mSharedPref;
     //Web data:
-    private String jsonString;
     private String params;
     private String hashCode;
 
-    public interface RestListner {
-        void onComplete(String json, String code);
-    }
-
-    private RestListner listner;
-
-    public RestClass(Context context, RestListner listner) {
+    public RestClass(Context context) {
         this.context = context;
-        this.listner = listner;
     }
 
     public void onCreate() {
         init();
     }
 
+
+
+    public  interface RestListner{
+        void onComplete(String jsonString);
+    }
     private void init() {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        getTypeAsyncTask = new GetTypeAsyncTask();
 
         if (getHashCode())
             Log.d("StaffApp", "Got HashCode: " + hashCode);
@@ -81,59 +60,161 @@ public class RestClass {
             return false;
     }
 
-    public void getPosts(int id, String code) {
-        params = "/post/list/";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
+    public void getPosts(int id, final RestListner RestListner) {
+        params = "/post/list/" + String.valueOf(id);
         Log.d("StaffApp", "GetPost Post get req");
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN );
+        client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                RestListner.onComplete(responseString);
+            }
+        });
     }
 
-    public void getUser(String code) {
+    public void getUser(final RestListner RestListner) {
         params = "/user/";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                RestListner.onComplete(responseString);
+            }
+        });
     }
 
-    public void deletePost(String id, String code) {
+    public void deletePost(String id, final RestListner RestListner) {
         params = "/post/" + id + "/delete";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        Log.d("StaffApp", "Deleteing Post post req");
-        getTypeAsyncTask.execute(asyncparams);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                RestListner.onComplete(responseString);
+            }
+        });
     }
-/*
-    public void updatePost(int id, String code) {
-        params = "/post/" + Integer.toString(id) + "/update";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        postTypeAsyncTask.execute(asyncparams);
+    public void updatePost(String _id, String content) {
+        params = "/post/" + _id + "/update";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        RequestParams reqparams = new RequestParams();
+        reqparams.add("content",content);
+        client.post(Constants.BASE_URL + params, reqparams, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                
+            }
+        });
     }
 
-    public void likePost(String _id, String code) {
+    public void likePost(String _id) {
         params = "/post/" + _id + "/like";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                
+            }
+        });
     }
 
-    public void dislikePost(String _id, String code) {
+    public void dislikePost(String _id) {
         params = "/post/" + _id + "/dislike";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        });
     }
 
-    public void undoLike(String _id, String code) {
+    public void undoLike(String _id) {
         params = "/post/" + _id + "/undolike";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        });
     }
 
-    public void undoDislike(String _id, String code) {
+    public void undoDislike(String _id) {
         params = "/post/" + _id + "/undodislike";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        });
     }
 
-    public void newPost(int id, String code) {
-        params = "/post/" + Integer.toString(id) + "/new";
-        String[] asyncparams = {Constants.BASE_URL + params, code};
-        getTypeAsyncTask.execute(asyncparams);
-    }*/
+    public void newPost(String content) {
+        params = "/post/new";
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams reqparams = new RequestParams();
+        reqparams.put("content",content);
+        client.addHeader("Authorization",Constants.TOKEN);
+        client.post(Constants.BASE_URL + params,reqparams,new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                
+            }
+        });
+    }
+
 }
