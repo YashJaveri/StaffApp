@@ -122,7 +122,7 @@ public void initializeDummy(){
         public class myViewHolder extends RecyclerView.ViewHolder{
 
             TextView postTitle,postContent,thumbsUpCount,thumbsDownCount;
-            Button attachment, thumbsUp,thumbsDown;
+            Button attachment, thumbsUp,thumbsDown,comment;
 
 
             public myViewHolder(@NonNull View itemView) {
@@ -136,6 +136,7 @@ public void initializeDummy(){
                 attachment=(Button)itemView.findViewById(R.id.post_attachment);
                 thumbsUp=(Button)itemView.findViewById(R.id.post_up_button);
                 thumbsDown=(Button)itemView.findViewById(R.id.post_down_button);
+                comment=(Button)itemView.findViewById(R.id.btn_comment);
 
             }
         }
