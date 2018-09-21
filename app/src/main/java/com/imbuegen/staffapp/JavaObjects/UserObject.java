@@ -32,7 +32,7 @@ public class UserObject {
         this.email = email;
     }
 
-    public Calendar getDOB() {
+    public String getDOB() {
         return DOB;
     }
 
@@ -48,7 +48,7 @@ public class UserObject {
         this.status = status;
     }
 
-    public Calendar getAnnivDATE() {
+    public String getAnnivDATE() {
         return annivDATE;
     }
 
@@ -56,7 +56,7 @@ public class UserObject {
         this.annivDATE = annivDATE;
     }
 
-    public Calendar getJoiningDate() {
+    public String getJoiningDate() {
         return joiningDate;
     }
 

@@ -3,16 +3,20 @@ package com.imbuegen.staffapp.Activities;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.imbuegen.staffapp.R;
+import com.imbuegen.staffapp.fragments.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +26,21 @@ public class MainActivity extends AppCompatActivity {
         bottomNav=(BottomNavigationView)findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(myNavigationSelector);
 
+        bottomNav.setSelectedItemId(0);
+
+        fragmentManager = getSupportFragmentManager();
+
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+
+        Fragment home = new HomeFragment();
+        ft.add(R.id.fragment_placeholder,home);
+        ft.commit();
+
     }
 
     public BottomNavigationView.OnNavigationItemSelectedListener myNavigationSelector = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        Fragment tab;
+
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
