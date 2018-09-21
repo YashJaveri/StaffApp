@@ -1,5 +1,6 @@
 package com.imbuegen.staffapp.services;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -19,39 +20,33 @@ import java.net.URL;
 public class FirebaseService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
-        super.onTokenRefresh();
+
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d("FCMSERVICE", "Refreshed token: " + refreshedToken);
-        sendTokenToServer(refreshedToken);
+        sendTokenToServerAsync asn = new sendTokenToServerAsync();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String UserHash = preferences.getString("HashCode",null);
+        asn.execute(refreshedToken,UserHash);
     }
-    public  void sendTokenToServer(final String token){
-        Handler handler = new Handler();
-        try {
-            handler.post(new Runnable() {
+    class sendTokenToServerAsync extends  AsyncTask<String,Void,Void>{
 
-                    URL url = new URL("http://tsec-18.herokuapp.com/user/token/" + token);
+        @Override
+        protected Void doInBackground(String... strings) {
+            try {
+                URL url = new URL("http://tsec-18.herokuapp.com/user/token/" + strings[0]);
 
-                @Override
-                public void run() {
-                    try {
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-                        String UserHash = preferences.getString("HashCode",null);
-                        if(UserHash != null){
-                            connection.setRequestMethod("POST");
-                            connection.addRequestProperty("token",UserHash);
+                HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
-                        }
-                        connection.connect();
+                if(strings[1] != null){
+                    connection.setRequestMethod("POST");
+                    connection.addRequestProperty("token",strings[1]);
 
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
                 }
-            });
-        }catch (MalformedURLException e) {
-            e.printStackTrace();
+                connection.connect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 }
