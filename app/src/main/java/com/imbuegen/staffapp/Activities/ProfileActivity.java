@@ -8,13 +8,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity  implements View.OnClickListener{
     ImageView profilePic;
     BottomNavigationView tabsNav;
     FragmentManager fragmentManager;
@@ -73,4 +75,9 @@ public class ProfileActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(this, "thumbs up!!!", Toast.LENGTH_SHORT).show();
+    }
 }

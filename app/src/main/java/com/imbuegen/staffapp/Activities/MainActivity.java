@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.imbuegen.staffapp.Controllers.DataController;
@@ -24,11 +25,13 @@ import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
 
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
 
     BottomNavigationView bottomNav;
     FragmentManager fragmentManager;
@@ -120,9 +123,5 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
-
-
-
-
 
 }
