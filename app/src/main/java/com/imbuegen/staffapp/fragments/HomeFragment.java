@@ -97,10 +97,10 @@ public void initializeDummy(){
 
         @Override
         public void onBindViewHolder(@NonNull homeAdapter.myViewHolder holder, int i) {
-            PostObject currentobject =posts.get(i);
+           // PostObject currentobject =posts.get(i);
 
-            holder.postTitle.setText(currentobject.getUser().getName());
-           holder.postContent.setText(currentobject.getContent());
+            holder.postTitle.setText(/*currentobject.getUser().getName()*/"user");
+           holder.postContent.setText(/*currentobject.getContent()*/"content");
            holder.thumbsUpCount.setText("fsfufas");
            holder.thumbsDownCount.setText("dufauf");
 
@@ -108,7 +108,7 @@ public void initializeDummy(){
 
         @Override
         public int getItemCount() {
-            return posts.size();
+            return 5;
         }
 
         public class myViewHolder extends RecyclerView.ViewHolder{
