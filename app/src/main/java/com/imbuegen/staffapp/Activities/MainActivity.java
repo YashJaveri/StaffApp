@@ -9,15 +9,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.imbuegen.staffapp.Controllers.DataController;
+import com.imbuegen.staffapp.JavaObjects.PostObject;
+import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
         Fragment home = new HomeFragment();
         ft.add(R.id.fragment_placeholder,home);
         ft.commit();
-
+        //FOR TEST PURPOSE:-
+        DataController dataController = new DataController(this);
+       dataController.deletePost("5ba54bb13e5186a14fe3f06e");
     }
 
 

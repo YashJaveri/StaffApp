@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 public class DataController{
@@ -29,6 +30,8 @@ public class DataController{
     private Gson mGson;
     private String jsonString;
     private RestClass rc;
+
+    private static final String TAG = "DataController";
 
     //Objects
     private ArrayList<UserObject> users;
@@ -50,6 +53,19 @@ public class DataController{
         JSONObject mainJSonObject = new JSONObject(jsonString);
 
         return  jsonToUser(mainJSonObject);
+    }
+
+    public void deletePost(String id){
+        rc = new RestClass(context, new RestClass.RestListner() {
+            @Override
+            public void onComplete(String json, String code) {
+                //do nothing
+                Log.e(TAG, "onComplete: listener");
+            }
+        });
+        rc.onCreate();
+
+        rc.deletePost(id, Constants.DELETE_POST);
     }
 
     public ArrayList<PostObject> requestPosts(int id) {
