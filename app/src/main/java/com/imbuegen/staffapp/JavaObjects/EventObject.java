@@ -17,7 +17,7 @@ public class EventObject {
         this.user = user;
     }
 
-    public Calendar getEventDate() {
+    public String getEventDate() {
         return eventDate;
     }
 
@@ -25,7 +25,7 @@ public class EventObject {
         this.eventDate = eventDate;
     }
 
-    public Calendar getPostDate() {
+    public String getPostDate() {
         return postDate;
     }
 

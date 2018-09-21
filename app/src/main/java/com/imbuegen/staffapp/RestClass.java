@@ -29,7 +29,6 @@ public class RestClass {
     private MyJsonClass myJsonClass;
     //SF:
     private SharedPreferences mSharedPref;
-    private Gson mGson;
     //Web data:
     private String jsonString;
     private String params;
@@ -46,13 +45,12 @@ public class RestClass {
         this.listner = listner;
     }
 
-    protected void onCreate() {
+    public void onCreate() {
         init();
     }
 
     private void init() {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        mGson = new Gson();
         myJsonClass = new MyJsonClass();
 
         if (getHashCode())
@@ -80,50 +78,56 @@ public class RestClass {
             return false;
     }
 
-    private void getPosts(int id,String code) {
-        params = "/post" + Integer.toString(id);
+    public void getPosts(int id,String code) {
+        params = "/post/list/" + Integer.toString(id);
+        String[] asyncparams = {Constants.BASE_URL + params,code};
+        myJsonClass.execute(asyncparams);
+    }
+
+    public void getUser(String code){
+        params = "/user/";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
     public void updatePost(int id,String code) {
-        params = "/post" + Integer.toString(id) + "/update";
+        params = "/post/" + Integer.toString(id) + "/update";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
     public void deletePost(int id,String code) {
-        params = "/post" + Integer.toString(id) + "/delete";
+        params = "/post/" + Integer.toString(id) + "/delete";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
-    public void likePost(int id, String code){
-        params = "/post" + Integer.toString(id) + "/like";
+    public void likePost(String _id, String code){
+        params = "/post/" + _id + "/like";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
-    public void dislikePost(int id, String code){
-        params = "/post" + Integer.toString(id) + "/dislike";
+    public void dislikePost(String _id, String code){
+        params = "/post/" + _id + "/dislike";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
-    public void undoLike(int id, String code){
-        params = "/post" + Integer.toString(id) + "/undolike";
+    public void undoLike(String _id, String code){
+        params = "/post/" + _id + "/undolike";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
-    public void undoDislike(int id, String code){
-        params = "/post" + Integer.toString(id) + "/undodislike";
+    public void undoDislike(String _id, String code){
+        params = "/post/" + _id + "/undodislike";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
 
     public void newPost(int id, String code){
-        params = "/post" + Integer.toString(id) + "/new";
+        params = "/post/" + Integer.toString(id) + "/new";
         String[] asyncparams = {Constants.BASE_URL + params,code};
         myJsonClass.execute(asyncparams);
     }
@@ -143,15 +147,21 @@ public class RestClass {
             String jsonString;
             try {
                 URL url = new URL(strings[0]);
-
+                Log.d("StaffApp",url.toString());
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
+                connection.setRequestProperty("token", Constants.TOKEN);
                 connection.connect();
+                Log.d("StaffApp", "Connected");
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                 String line;    //temp to read lines
-                while ((line = reader.readLine()) != null)
+                while ((line = reader.readLine()) != null) {
                     sb.append(line);
+                    Log.d("StaffApp", line);
+                }
+                Log.d("StaffApp", "Read");
+                Log.d("StaffApp",sb.toString());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
