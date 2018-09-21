@@ -24,6 +24,8 @@
         android:layout_height="wrap_content"
         android:padding="2dp"
         android:backgroundTint="@color/gray"
+        android:text="attachments"
+        android:textColor="@color/white"
         />
 
     <LinearLayout
@@ -31,6 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/reactions_layout"
         android:layout_below="@id/post_attachment">
+        
         <Button
             android:id="@+id/post_up_button"
             android:layout_width="30dp"
@@ -65,8 +68,6 @@
         android:layout_below="@+id/reactions_layout"
         android:orientation="horizontal"
         >
-
-
 
             <ImageView
                 android:layout_width="wrap_content"
