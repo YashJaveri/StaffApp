@@ -16,13 +16,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.imbuegen.staffapp.Controllers.DataController;
+import com.imbuegen.staffapp.JavaObjects.PostObject;
+import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+
 
     BottomNavigationView bottomNav;
     FragmentManager fragmentManager;
@@ -49,7 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         home.setArguments(arg);
         ft.add(R.id.fragment_placeholder,home);
         ft.commit();
-
+        //FOR TEST PURPOSE:-
+        DataController dataController = new DataController(this);
+       dataController.deletePost("5ba54bb13e5186a14fe3f06e");
     }
 
 
@@ -113,22 +124,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()){
-
-            case R.id.post_up_button:
-
-                break;
-            case R.id.post_down_button:
-
-                break;
-            case R.id.btn_comment:
-
-                break;
-        }
-        Toast.makeText(this, "thumbs up!!!", Toast.LENGTH_SHORT).show();
-    }
 }
