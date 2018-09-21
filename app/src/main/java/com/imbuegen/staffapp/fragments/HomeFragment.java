@@ -109,8 +109,8 @@ public void initializeDummy(){
 
             holder.postTitle.setText(currentobject.getUser().getName());
            holder.postContent.setText(currentobject.getContent());
-           holder.thumbsUpCount.setText("fsfufas");
-           holder.thumbsDownCount.setText("dufauf");
+           holder.thumbsUpCount.setText(Integer.toString(currentobject.getLikeObj().size()));
+           holder.thumbsDownCount.setText(Integer.toString(currentobject.getDisLikeObj().size()));
 
         }
 
