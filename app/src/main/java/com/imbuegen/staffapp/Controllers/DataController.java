@@ -1,5 +1,6 @@
 package com.imbuegen.staffapp.Controllers;
 
+
 import android.content.Context;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.imbuegen.staffapp.Constants;
+
 import com.imbuegen.staffapp.JavaObjects.CommentsObject;
 import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
 import com.imbuegen.staffapp.JavaObjects.PostObject;
@@ -27,6 +29,7 @@ public class DataController{
     private Gson mGson;
     private String jsonString;
     private RestClass rc;
+
     //Objects
     private ArrayList<UserObject> users;
     private ArrayList<PostObject> posts;
@@ -34,7 +37,7 @@ public class DataController{
     private ArrayList<DisLikesObject> disLikesObjs;
     private ArrayList<CommentsObject> commentsObjs;
     //Web
-    private RestClass restClass;
+  //  private RestClass restClass;
 
     public DataController(Context context) {
         this.context = context;

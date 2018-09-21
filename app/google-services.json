@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "160676207671",
+    "firebase_url": "https://tsechack-c701d.firebaseio.com",
+    "project_id": "tsechack-c701d",
+    "storage_bucket": "tsechack-c701d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160676207671:android:a73c0ffd30908848",
+        "android_client_info": {
+          "package_name": "com.imbuegen.staffapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160676207671-3udfu791g3bdt1s5mi9q65ur1c2vkcv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.imbuegen.staffapp",
+            "certificate_hash": "dfd9a561349cd7e068020b517373fcb4985375df"
+          }
+        },
+        {
+          "client_id": "160676207671-1f9dm8teg0h6c061rt5edqcr5jaep57f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKuYH0CxQ9ny0XfSEuxzRNgD590ohjbso"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160676207671-1f9dm8teg0h6c061rt5edqcr5jaep57f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,11 +3,13 @@ package com.imbuegen.staffapp.JavaObjects;
 import java.util.ArrayList;
 
 public class PostObject {
+
     private String _id;
     private String content;
     private UserObject user;
     private ArrayList<LikesObject> likeObjs;
     private ArrayList<DisLikesObject> dislikeObjs;
+
     private ArrayList<CommentsObject> comments;
 
     public ArrayList<LikesObject> getlikeObjss() {
@@ -25,6 +27,7 @@ public class PostObject {
     public void setDislikeObjs(ArrayList<DisLikesObject> dislikeObjs) {
         this.dislikeObjs = dislikeObjs;
     }
+
 
     public ArrayList<CommentsObject> getComment() {
         return comments;
