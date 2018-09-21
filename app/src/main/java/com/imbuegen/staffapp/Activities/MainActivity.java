@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.imbuegen.staffapp.R;
@@ -21,7 +22,7 @@ import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     BottomNavigationView bottomNav;
     FragmentManager fragmentManager;
@@ -113,7 +114,21 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
+    @Override
+    public void onClick(View view) {
 
+        switch (view.getId()){
 
+            case R.id.post_up_button:
 
+                break;
+            case R.id.post_down_button:
+
+                break;
+            case R.id.btn_comment:
+
+                break;
+        }
+        Toast.makeText(this, "thumbs up!!!", Toast.LENGTH_SHORT).show();
+    }
 }

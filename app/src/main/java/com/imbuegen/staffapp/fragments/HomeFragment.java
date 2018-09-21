@@ -184,23 +184,63 @@ public void initializeDummy(){
         public class myViewHolder extends RecyclerView.ViewHolder{
 
             TextView postTitle,postContent,thumbsUpCount,thumbsDownCount;
-            Button attachment, thumbsUp,thumbsDown,comment;
+            Button  thumbsUp,thumbsDown,comment;
 
 
             public myViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-                postTitle=(TextView)itemView.findViewById(R.id.postTitle);
-                postContent=(TextView)itemView.findViewById(R.id.postContent);
-                thumbsUpCount=(TextView)itemView.findViewById(R.id.txt_no_thumbsUp);
-                thumbsDownCount=(TextView)itemView.findViewById(R.id.txt_no_thumbsDown);
+                postTitle = (TextView) itemView.findViewById(R.id.postTitle);
+                postContent = (TextView) itemView.findViewById(R.id.postContent);
+                thumbsUpCount = (TextView) itemView.findViewById(R.id.txt_no_thumbsUp);
+                thumbsDownCount = (TextView) itemView.findViewById(R.id.txt_no_thumbsDown);
 
-                attachment=(Button)itemView.findViewById(R.id.post_attachment);
-                thumbsUp=(Button)itemView.findViewById(R.id.post_up_button);
-                thumbsDown=(Button)itemView.findViewById(R.id.post_down_button);
-                comment=(Button)itemView.findViewById(R.id.btn_comment);
+                thumbsUp = (Button) itemView.findViewById(R.id.post_up_button);
+                thumbsDown = (Button) itemView.findViewById(R.id.post_down_button);
+                comment = (Button) itemView.findViewById(R.id.btn_comment);
 
+                //setting on Click listeners
+                clickListener listener = new clickListener();
+                thumbsUp.setOnClickListener(listener);
+                thumbsDown.setOnClickListener(listener);
+                comment.setOnClickListener(listener);
             }
+
+                 class clickListener implements View.OnClickListener{
+                boolean  hasLiked=false,hasDisliked=false;
+
+                    @Override
+                    public void onClick(View view) {
+
+                        switch (view.getId()){
+
+                            case R.id.post_up_button:
+                                if(!hasLiked &&!hasDisliked) {
+                                    int count1 = Integer.parseInt(thumbsUpCount.getText().toString());
+                                    thumbsUpCount.setText(Integer.toString(++count1));
+                                    hasLiked=true;
+                                }
+                                break;
+                            case R.id.post_down_button:
+                                if(!hasDisliked && !hasLiked) {
+                                    int count2 = Integer.parseInt(thumbsDownCount.getText().toString());
+                                    thumbsDownCount.setText(Integer.toString(++count2));
+                                    hasDisliked=true;
+                                }
+                                break;
+                            case R.id.btn_comment:
+                                //todo
+                                //start comment fragment here
+                                break;
+                        }
+                    }
+                }
+
+
         }
     }
+
+
+
+
 }

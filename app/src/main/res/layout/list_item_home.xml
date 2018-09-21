@@ -17,7 +17,7 @@
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         />
 
-    <Button
+<!--    <Button
         android:id="@+id/post_attachment"
         android:layout_below="@+id/postContent"
         android:layout_width="match_parent"
@@ -26,13 +26,13 @@
         android:backgroundTint="@color/gray"
         android:text="attachments"
         android:textColor="@color/white"
-        />
+        />-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/reactions_layout"
-        android:layout_below="@id/post_attachment">
+        android:layout_below="@id/postContent">
         
         <Button
             android:id="@+id/post_up_button"
