@@ -1,0 +1,86 @@
+
+
+    @SuppressLint("StaticFieldLeak")
+    private class GetTypeAsyncTask extends AsyncTask<String, Integer, ArrayList<String>> {
+        private ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = ProgressDialog.show(context, "Fetching Data", "Please wait!", false);
+        }
+
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            String jsonString;
+            try {
+                URL url = new URL(strings[0]);
+                Log.d("StaffApp", url.toString());
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.setUseCaches(false);
+                connection.setRequestProperty("Authorization", Constants.TOKEN);
+                Log.d("StaffApp", "GEt bc");
+                connection.setRequestMethod("GET");
+                Log.d("StaffApp", "BC");
+                connection.connect();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;    //temp to read lines
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                    Log.d("StaffApp", line);
+                }
+                Log.d("StaffApp", "Read");
+                Log.d("StaffApp", sb.toString());
+            } catch (MalformedURLException e) {
+                Log.e("StaffApp", e.toString());
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                jsonString = sb.toString();
+            }
+            ArrayList<String> list = new ArrayList<>();
+            list.add(jsonString);
+            list.add(strings[1]);
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> array) {
+            listner.onComplete(array.get(0), array.get(1));
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class PostTypeAsyncTask extends AsyncTask<String, Integer, Boolean> {
+        private ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = ProgressDialog.show(context, "Fetching Data", "Please wait!", false);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            String jsonString;
+            try {
+                URL url = new URL(strings[0]);
+                Log.d("StaffApp", url.toString());
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(false);
+                connection.setUseCaches(false);
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Authorization", Constants.TOKEN);
+                Log.d("StaffApp", "BC");
+                connection.connect();
+                Log.d("StaffApp", "Connected");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+    }

@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        android:foreground="?attr/selectableItemBackground"
         android:visibility="visible"
         app:itemIconTint="@color/black"
         app:itemTextColor="@color/black"

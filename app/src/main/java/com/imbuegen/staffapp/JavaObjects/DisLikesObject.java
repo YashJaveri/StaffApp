@@ -2,10 +2,8 @@ package com.imbuegen.staffapp.JavaObjects;
 
 public class DisLikesObject {
     private int employeeId;
-    private String suggestion;
 
-    public DisLikesObject(int _employeeId, String suggestion) {
+    public DisLikesObject(int _employeeId) {
         this.employeeId = _employeeId;
-        this.suggestion = suggestion;
     }
 }

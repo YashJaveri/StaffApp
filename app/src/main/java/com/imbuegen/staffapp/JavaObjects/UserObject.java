@@ -48,7 +48,9 @@ public class UserObject {
         this.status = status;
     }
 
-    public String getAnnivDATE() {
+
+    public  String getAnnivDATE() {
+
         return annivDATE;
     }
 
