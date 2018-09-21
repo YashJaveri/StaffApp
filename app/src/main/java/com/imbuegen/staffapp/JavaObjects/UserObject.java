@@ -1,0 +1,106 @@
+package com.imbuegen.staffapp.JavaObjects;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class UserObject {
+    private int employeeID;
+    private String name;
+    private String email;
+    private String DOB;
+    private String status;
+    private String annivDATE;
+    private String joiningDate;
+    private ArrayList<String> familyEmails;
+    private int points;
+    private String department;
+    private String position;
+
+    public int getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(int employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Calendar getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Calendar getAnnivDATE() {
+        return annivDATE;
+    }
+
+    public void setAnnivDATE(String annivDATE) {
+        this.annivDATE = annivDATE;
+    }
+
+    public Calendar getJoiningDate() {
+        return joiningDate;
+    }
+
+    public void setJoiningDate(String joiningDate) {
+        this.joiningDate = joiningDate;
+    }
+
+    public ArrayList<String> getFamilyEmails() {
+        return familyEmails;
+    }
+
+    public void setFamilyEmails(ArrayList<String> familyEmails) {
+        this.familyEmails = familyEmails;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getposition() {
+        return position;
+    }
+
+    public void setposition(String position) {
+        this.position = position;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
