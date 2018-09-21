@@ -3,12 +3,6 @@ package com.imbuegen.staffapp.JavaObjects;
 import java.util.ArrayList;
 
 public class PostObject {
-    public PostObject(String id, String content, UserObject user) {
-        this.id = id;
-        this.content = content;
-        this.user = user;
-
-    }
 
     private String id;
     private String content;

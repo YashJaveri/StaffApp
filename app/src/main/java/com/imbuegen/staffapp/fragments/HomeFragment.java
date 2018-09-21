@@ -65,7 +65,11 @@ public void initializeDummy(){
     user.setName("user one");
     user.setEmployeeID(1);
 
-    PostObject post = new PostObject("1","dummy post content",user);
+    PostObject post = new PostObject();
+
+    post.setId("1");
+    post.setContent("dummy post content");
+    post.setUser(user);
 
     ArrayList<LikesObject> likeList = new ArrayList<>();
     likeList.add(new LikesObject(user.getEmployeeID()));
