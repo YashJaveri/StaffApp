@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,23 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<PostObject> posts;
     RecyclerView.Adapter myAdapter;
+    boolean showRelated;
+
+
+    boolean isLoading=false;         //specifies whether request is being processed
+    boolean isEnd =false;            //specifies end of users feed
+
+    int oldListsize;
+    int currentItems,totalItems,scrollOutItems=0;
+       /*totalItems are the total items in the adapter's arraylist
+         currentItems  are the item visible on the screen
+         scrolloutItems are the items tha are scrolled out of the screen*/
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        showRelated=this.getArguments().getBoolean("showRelated");
         return inflater.inflate(R.layout.fragment_home,container,false);
     }
 
@@ -47,13 +60,58 @@ public class HomeFragment extends Fragment {
 
         initializeDummy();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        final LinearLayoutManager layoutManager =new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
 
         myAdapter = new homeAdapter();
         recyclerView.setAdapter(myAdapter);
 
         //todo
         //on scroll listener
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+
+                currentItems = layoutManager.getChildCount();
+                totalItems = layoutManager.getItemCount();
+                scrollOutItems = layoutManager.findFirstVisibleItemPosition();
+
+                Log.e(TAG, "onScrolled: ci "+currentItems+",ti "+totalItems+",soi "+scrollOutItems);
+
+                if(dy>0 && (totalItems==currentItems+scrollOutItems)) {
+
+                    oldListsize=posts.size();
+                    //dy>0 means that the user is going down
+
+                    // (currentItems+scrollOutItems)  gives the total no of items seen by the user
+                    //(totalItems==currentItems+scrollOutItems) means that the user has already seen all the items in the adapter's arraylist
+
+
+                    if(!isLoading&&(!isEnd)){
+                        //request new data here
+                        //with incremented page number
+
+
+
+                        if(posts.size()>oldListsize) {
+                            oldListsize = posts.size();
+                        }else{
+                            isEnd=true;
+                        }
+                        Log.e(TAG, "onScrolled: request data");
+                    }
+                }
+            }
+        });
+
+
+
+        //If showRelated is true we only show posts and events of the user
+
+
     }
 
 
