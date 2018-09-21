@@ -7,24 +7,24 @@ public class PostObject {
     private String content;
     private UserObject user;
 
-    public ArrayList<LikesObject> getLikeObj() {
-        return likeObj;
+    public ArrayList<LikesObject> getlikeObjss() {
+        return likeObjs;
     }
 
-    public void setLikeObj(ArrayList<LikesObject> likeObj) {
-        this.likeObj = likeObj;
+    public void setlikeObjs(ArrayList<LikesObject> likeObjs) {
+        this.likeObjs = likeObjs;
     }
 
-    public ArrayList<DisLikesObject> getDisLikeObj() {
-        return disLikeObj;
+    public ArrayList<DisLikesObject> getDislikeObjs() {
+        return dislikeObjs;
     }
 
-    public void setDisLikeObj(ArrayList<DisLikesObject> disLikeObj) {
-        this.disLikeObj = disLikeObj;
+    public void setDislikeObjs(ArrayList<DisLikesObject> dislikeObjs) {
+        this.dislikeObjs = dislikeObjs;
     }
 
-    private ArrayList<LikesObject> likeObj;
-    private ArrayList<DisLikesObject> disLikeObj;
+    private ArrayList<LikesObject> likeObjs;
+    private ArrayList<DisLikesObject> dislikeObjs;
     private ArrayList<CommentsObject> comments;
 
     public ArrayList<CommentsObject> getComment() {
