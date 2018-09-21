@@ -84,14 +84,14 @@
         android:gravity="center"/>
 
     <TextView
-        android:id="@+id/view_status"
+        android:id="@+id/view_joining_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/view_email"
         android:layout_alignLeft="@+id/view_email"
         android:layout_marginTop="153dp"
-        android:text="status"
+        android:text="joining date"
         android:gravity="center"/>
 
     <TextView
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/view_dob"
         android:layout_alignLeft="@+id/view_dob"
-        android:layout_alignTop="@+id/view_status"
+        android:layout_alignTop="@+id/view_joining_date"
         android:text="anniversary Date"
         android:gravity="center"/>
 

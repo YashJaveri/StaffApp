@@ -13,24 +13,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+
 import android.widget.Toast;
 
 import com.imbuegen.staffapp.Controllers.DataController;
-import com.imbuegen.staffapp.JavaObjects.PostObject;
-import com.imbuegen.staffapp.JavaObjects.UserObject;
+
+import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.R;
+import com.imbuegen.staffapp.fragments.CommentsFragment;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
 
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements fragmentCallback {
 
 
     BottomNavigationView bottomNav;
@@ -60,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         ft.commit();
         //FOR TEST PURPOSE:-
         DataController dataController = new DataController(this);
+        dataController.onCreate();
        dataController.deletePost("5ba54bb13e5186a14fe3f06e");
     }
 
@@ -124,4 +122,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void showComments() {
+        Fragment comments = new CommentsFragment();
+        FragmentTransaction ft =fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_placeholder,comments);
+        ft.commit();
+    }
 }

@@ -9,4 +9,12 @@ public class CommentsObject {
         this.user = user;
         this.comment = comment;
     }
+
+    public UserObject getUser() {
+        return user;
+    }
+
+    public String getComment() {
+        return comment;
+    }
 }

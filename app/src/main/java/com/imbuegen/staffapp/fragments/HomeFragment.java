@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.JavaObjects.CommentsObject;
 import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
 import com.imbuegen.staffapp.JavaObjects.LikesObject;
@@ -30,6 +31,7 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<PostObject> posts;
     RecyclerView.Adapter myAdapter;
+    fragmentCallback callback;
     boolean showRelated;
 
 
@@ -55,6 +57,8 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView=(RecyclerView) view.findViewById(R.id.home_recyclerView);
+
+        this.callback=(fragmentCallback) getActivity();
 
         posts=new ArrayList<>();
 
@@ -231,6 +235,8 @@ public void initializeDummy(){
                             case R.id.btn_comment:
                                 //todo
                                 //start comment fragment here
+                                callback.showComments();
+
                                 break;
                         }
                     }

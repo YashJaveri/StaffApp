@@ -10,8 +10,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
@@ -20,6 +22,9 @@ public class ProfileActivity extends AppCompatActivity  implements View.OnClickL
     ImageView profilePic;
     BottomNavigationView tabsNav;
     FragmentManager fragmentManager;
+
+    TextView name,email,points,DoB,anniv,joiningDate,department,position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,16 @@ public class ProfileActivity extends AppCompatActivity  implements View.OnClickL
         tabsNav=(BottomNavigationView)findViewById(R.id.profile_tabs);
         tabsNav.setOnNavigationItemSelectedListener(mNavigationSelector);
 
+        name=(TextView)findViewById(R.id.txt_profile_name);
+        points=(TextView)findViewById(R.id.view_points);
+        DoB=(TextView)findViewById(R.id.view_dob);
+        anniv=(TextView)findViewById(R.id.view_anniv_date);
+        joiningDate=(TextView)findViewById(R.id.view_joining_date);
+        department=(TextView)findViewById(R.id.view_department);
+        position=(TextView)findViewById(R.id.view_position);
+        email=(TextView)findViewById(R.id.view_email);
+
+        initialize();
 
         Fragment home = new HomeFragment();
         Bundle arg = new Bundle();
@@ -43,6 +58,35 @@ public class ProfileActivity extends AppCompatActivity  implements View.OnClickL
         ft.commit();
     }
 
+    public void initialize(){
+
+        UserObject user=new UserObject();
+        user.setName("yash");
+        user.setEmployeeID(1);
+        user.setAnnivDATE("10/10/2000");
+        user.setDepartment("IT Department");
+        user.setDOB("1/1/2010");
+        user.setEmail("ekNoZhatu@gmail.com");
+        user.setPoints(19);
+        user.setStatus("Married");
+        user.setposition("developer");
+
+        name.setText(user.getName());
+        points.setText(Integer.toString(user.getPoints()));
+        DoB.setText(user.getDOB());
+
+        if(user.getStatus().equals("married")) {
+            anniv.setText(user.getAnnivDATE());
+        }else{
+            anniv.setVisibility(View.GONE);
+        }
+        
+        email.setText(user.getEmail());
+        joiningDate.setText(user.getJoiningDate());
+        department.setText(user.getDepartment());
+        position.setText(user.getposition());
+
+    }
 
     public BottomNavigationView.OnNavigationItemSelectedListener mNavigationSelector = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
