@@ -21,6 +21,7 @@ import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
 
 import org.json.JSONException;
@@ -46,8 +47,12 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.d("MYTAG",token);
         Fragment home = new HomeFragment();
+        Bundle arg = new Bundle();
+        arg.putBoolean("showRelated",false);
+        home.setArguments(arg);
         ft.add(R.id.fragment_placeholder,home);
         ft.commit();
         //FOR TEST PURPOSE:-
@@ -82,9 +87,12 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
             FragmentTransaction ft =fragmentManager.beginTransaction();
+            Bundle args =new Bundle();
             switch (menuItem.getItemId()){
                 case R.id.nav_home:
                    Fragment home=new HomeFragment();
+                   args.putBoolean("showRelated",false);
+                   home.setArguments(args);
                    ft.replace(R.id.fragment_placeholder,home);
                    ft.commit();
                     Toast.makeText(MainActivity.this, "you clicked home", Toast.LENGTH_SHORT).show();
@@ -93,6 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.nav_events:
                     Fragment eventTab = new EventsFragment();
+                    args.putBoolean("showRelated",false);
+                    eventTab.setArguments(args);
                     ft.replace(R.id.fragment_placeholder,eventTab);
                     ft.commit();
                     Toast.makeText(MainActivity.this, "you clicked events", Toast.LENGTH_SHORT).show();

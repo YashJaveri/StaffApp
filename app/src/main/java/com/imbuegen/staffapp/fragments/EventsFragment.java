@@ -23,11 +23,14 @@ public class EventsFragment extends Fragment {
     RecyclerView recyclerView;
     RecyclerView.Adapter myAdapter;
     ArrayList<EventObject> eventsList;
+    boolean showRelated;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        showRelated=this.getArguments().getBoolean("showRelated");
         return inflater.inflate(R.layout.fragment_events,container,false);
 
 
@@ -45,6 +48,8 @@ public class EventsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myAdapter =new eventAdapter();
         recyclerView.setAdapter(myAdapter);
+
+        //If showRelated is true we only show posts and events of the user
 
     }
 

@@ -33,14 +33,14 @@ public class FirebaseService extends FirebaseInstanceIdService {
         @Override
         protected Void doInBackground(String... strings) {
             try {
-                URL url = new URL("http://tsec-18.herokuapp.com/user/token/" + strings[0]);
+                URL url = new URL("http://tsec-18.herokuapp.com/user/fcm/" + strings[0]);
 
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
                 if(strings[1] != null){
                     connection.setRequestMethod("POST");
-                    connection.addRequestProperty("token",strings[1]);
-
+                    connection.addRequestProperty("Authorization","token " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViYTRmZDUyY2VhNmU3NWM4MWFmYzVjYyJ9.6J52iC4770C0fl8BnIvYMXgradbAsRapyw_d-DJT71w");
+                    Log.d("vsdv",strings[0]);
                 }
                 connection.connect();
             } catch (Exception e) {
