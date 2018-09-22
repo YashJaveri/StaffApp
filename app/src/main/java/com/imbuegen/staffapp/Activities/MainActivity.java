@@ -13,14 +13,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+
 import android.widget.Toast;
 
 import com.imbuegen.staffapp.Constants;
 import com.imbuegen.staffapp.Controllers.DataController;
-import com.imbuegen.staffapp.JavaObjects.PostObject;
-import com.imbuegen.staffapp.JavaObjects.UserObject;
+
+import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.R;
+import com.imbuegen.staffapp.fragments.CommentsFragment;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -38,8 +39,7 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements fragmentCallback {
 
     BottomNavigationView bottomNav;
     FragmentManager fragmentManager;
@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        //String token = FirebaseInstanceId.getInstance().getToken();
         Fragment home = new HomeFragment();
         Bundle arg = new Bundle();
         arg.putBoolean("showRelated",false);
@@ -147,4 +146,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void showComments() {
+        Fragment comments = new CommentsFragment();
+        FragmentTransaction ft =fragmentManager.beginTransaction();
+        ft.replace(R.id.fragment_placeholder,comments);
+        ft.commit();
+    }
 }

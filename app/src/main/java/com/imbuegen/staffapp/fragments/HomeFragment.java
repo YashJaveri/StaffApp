@@ -1,9 +1,13 @@
 package com.imbuegen.staffapp.fragments;
 
+import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.JavaObjects.CommentsObject;
 import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
 import com.imbuegen.staffapp.JavaObjects.LikesObject;
@@ -30,6 +35,7 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     ArrayList<PostObject> posts;
     RecyclerView.Adapter myAdapter;
+    fragmentCallback callback;
     boolean showRelated;
 
 
@@ -56,12 +62,19 @@ public class HomeFragment extends Fragment {
 
         recyclerView=(RecyclerView) view.findViewById(R.id.home_recyclerView);
 
+        this.callback=(fragmentCallback) getActivity();
+
         posts=new ArrayList<>();
 
         initializeDummy();
 
         final LinearLayoutManager layoutManager =new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+
+
+        DividerItemDecoration  dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         myAdapter = new homeAdapter();
         recyclerView.setAdapter(myAdapter);
@@ -217,6 +230,8 @@ public void initializeDummy(){
                             case R.id.post_up_button:
                                 if(!hasLiked &&!hasDisliked) {
                                     int count1 = Integer.parseInt(thumbsUpCount.getText().toString());
+                                  /*  if (Build.VERSION.SDK_INT >= 21) {*/
+                                        thumbsUp.setBackground(getResources().getDrawable(R.drawable.ic_like_new));
                                     thumbsUpCount.setText(Integer.toString(++count1));
                                     hasLiked=true;
                                 }
@@ -224,13 +239,17 @@ public void initializeDummy(){
                             case R.id.post_down_button:
                                 if(!hasDisliked && !hasLiked) {
                                     int count2 = Integer.parseInt(thumbsDownCount.getText().toString());
+                                    thumbsDown.setBackground(getResources().getDrawable(R.drawable.ic_thumb_down_button));
                                     thumbsDownCount.setText(Integer.toString(++count2));
+
                                     hasDisliked=true;
                                 }
                                 break;
                             case R.id.btn_comment:
                                 //todo
                                 //start comment fragment here
+                                callback.showComments();
+
                                 break;
                         }
                     }
