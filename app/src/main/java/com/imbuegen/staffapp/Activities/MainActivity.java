@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNav=(BottomNavigationView)findViewById(R.id.bottom_nav);
+        bottomNav=findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(myNavigationSelector);
 
         bottomNav.setSelectedItemId(0);
@@ -76,11 +76,15 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         Fragment home = new HomeFragment();
+
         Bundle arg = new Bundle();
         arg.putBoolean("showRelated",false);
         home.setArguments(arg);
+
         ft.add(R.id.fragment_placeholder,home);
         ft.commit();
+
+
         //FOR TEST PURPOSE:-
             DataController dataController = new DataController(this);
             dataController.onCreate();

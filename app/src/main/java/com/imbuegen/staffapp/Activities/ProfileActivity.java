@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
@@ -47,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity  implements fragmentCallb
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
         profilePic=(ImageView)findViewById(R.id.img_profile_pic);
-        profilePic.setImageResource(R.drawable.ic_person_black_24dp);
+        profilePic.setImageResource(R.drawable.ic_person_white_24dp);
 
         tabsNav=(BottomNavigationView)findViewById(R.id.profile_tabs);
         tabsNav.setOnNavigationItemSelectedListener(mNavigationSelector);

@@ -47,12 +47,64 @@ public class DataController {
         this.context = context;
     }
 
-    public void onCreate(){
+    public void onCreate() {
         rc = new RestClass(context);
         rc.onCreate();
     }
 
+<<<<<<< HEAD
     public void requestCurrentUser(final RestClass.RestListner<UserObject> User) throws JSONException {
+=======
+    public ArrayList<EventObject> requestEvents(String _id) {
+        ArrayList<EventObject> eventObjects = new ArrayList<>();
+
+        rc.getEvents(_id, new RestClass.RestListner() {
+            @Override
+            public void onComplete(String _jsonString) {
+                jsonString = _jsonString;
+            }
+        });
+        JSONObject mainJsonObj = null;
+        try {
+            mainJsonObj = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            assert mainJsonObj != null;
+            if (mainJsonObj.getJSONArray("docs") != null) {
+                ArrayList<PostObject> postObjects = new ArrayList<>();
+                for (int i = 0; i < mainJsonObj.getJSONArray("docs").length(); i++) {
+                    JSONObject jsonObject = null;
+                    EventObject eventObject = new EventObject();
+                    try {
+                        assert jsonObject != null;
+                        eventObject.set_id(jsonObject.getString("_id"));
+                        eventObject.setMessage(jsonObject.getString("messages"));
+                        eventObject.setEventDate(jsonObject.getString("eventDate"));
+                        eventObject.setPostDate(jsonObject.getString("postDate"));
+                        eventObject.setUser(jsonToUser(jsonObject.getJSONObject("user")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    eventObjects.add(eventObject);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return eventObjects;
+    }
+
+    public void updateEvent(String _id, String message){
+        rc.updateEvents(_id, message);
+    }
+
+    public void deleteEvent(String _id){
+        rc.deleteEvent(_id);
+    }
+    public UserObject requestCurrentUser() throws JSONException {
+>>>>>>> f0104a10e1233d1c40846fd813c8bdea86787e23
 
         rc.getUser(new RestClass.RestListner<String>() {
             @Override
@@ -68,16 +120,17 @@ public class DataController {
         });
 
     }
+
     public void deletePost(String id) {
         rc.deletePost(id);
     }
 
-    public void updatePost(String _id, String content){
-        Log.d("MYAPP",_id);
+    public void updatePost(String _id, String content) {
+        Log.d("MYAPP", _id);
         rc.updatePost(_id, content);
     }
 
-    public void  newPost(String content){
+    public void newPost(String content) {
         rc.newPost(content);
     }
 
@@ -127,18 +180,55 @@ public class DataController {
         Log.d("StaffApp", "JsonObj" + jsonString);
 
 
+<<<<<<< HEAD
+=======
+        JSONObject mainJsonObj = null;
+        try {
+            mainJsonObj = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            assert mainJsonObj != null;
+            if (mainJsonObj.getJSONArray("docs") != null) {
+                ArrayList<PostObject> postObjects = new ArrayList<>();
+                for (int i = 0; i < mainJsonObj.getJSONArray("docs").length(); i++) {
+                    JSONObject jsonObject = null;
+                    PostObject postObject = new PostObject();
+                    try {
+                        assert jsonObject != null;
+                        postObject.set_id(jsonObject.getString("_id"));
+                        postObject.setContent(jsonObject.getString("content"));
+                        postObject.setlikeObjs(jsonToLikeObj(jsonObject.getJSONArray("likes")));
+                        postObject.setDislikeObjs(jsonToDislikeObj(jsonObject.getJSONArray("dislikes")));
+                        postObject.setComment(jsonToCommentObjs(jsonObject.getJSONArray("comments")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    postObjects.add(postObject);
+                }
+                return postObjects;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return posts;
+>>>>>>> f0104a10e1233d1c40846fd813c8bdea86787e23
     }
 
-    public void like(String _id){
+    public void like(String _id) {
         rc.likePost(_id);
     }
-    public void dislike(String _id){
+
+    public void dislike(String _id) {
         rc.dislikePost(_id);
     }
-    public void undoLike(String _id){
+
+    public void undoLike(String _id) {
         rc.undoLike(_id);
     }
-    public void undoDislike(String _id){
+
+    public void undoDislike(String _id) {
         rc.undoDislike(_id);
     }
 
@@ -221,9 +311,12 @@ public class DataController {
         userObject.setPoints(_jsonObject.getInt("points"));
         Log.d("6 points", _jsonObject.toString());
         userObject.setposition(_jsonObject.getString("position"));
+<<<<<<< HEAD
         Log.d("7 pos", _jsonObject.toString());
 
         Log.d("StaffAppFn", userObject.toString());
+=======
+>>>>>>> f0104a10e1233d1c40846fd813c8bdea86787e23
         return userObject;
     }
     public void requestEvents(int _id, final RestClass.RestListner<ArrayList<EventObject>> onEvent) {

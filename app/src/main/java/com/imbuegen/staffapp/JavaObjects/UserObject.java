@@ -16,6 +16,32 @@ public class UserObject implements Serializable{
     private int points;
     private String department;
     private String position;
+    private ArrayList<PostObject> postObjects;
+    private ArrayList<EventObject> eventObjects;
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public ArrayList<PostObject> getPostObjects() {
+        return postObjects;
+    }
+
+    public void setPostObjects(ArrayList<PostObject> postObjects) {
+        this.postObjects = postObjects;
+    }
+
+    public ArrayList<EventObject> getEventObjects() {
+        return eventObjects;
+    }
+
+    public void setEventObjects(ArrayList<EventObject> eventObjects) {
+        this.eventObjects = eventObjects;
+    }
 
     public int getEmployeeID() {
         return employeeID;
