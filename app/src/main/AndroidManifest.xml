@@ -11,29 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<<<<<<< HEAD
-        <activity android:name=".Activities.MainActivity">
-=======
-
         <activity android:name=".Activities.LoginActivity"
             android:noHistory="true">
->>>>>>> f0104a10e1233d1c40846fd813c8bdea86787e23
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
 
-        <service android:name=".services.FirebaseService">
-=======
         <activity android:name=".Activities.MainActivity">
 
         </activity>
         <service
             android:name=".services.FirebaseService">
->>>>>>> f0104a10e1233d1c40846fd813c8bdea86787e23
+
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

@@ -1,6 +1,5 @@
 package com.imbuegen.staffapp.Activities;
 
-import android.Manifest;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,22 +11,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.view.View;
 import android.widget.Toast;
 
-import com.imbuegen.staffapp.Constants;
-import com.imbuegen.staffapp.Controllers.DataController;
-
 import com.imbuegen.staffapp.Interfaces.fragmentCallback;
-import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.CommentsFragment;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
@@ -35,14 +28,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class MainActivity extends AppCompatActivity implements fragmentCallback {
 
@@ -86,10 +74,10 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
 
 
         //FOR TEST PURPOSE:-
-            DataController dataController = new DataController(this);
-            dataController.onCreate();
-            dataController.updatePost("5ba54bb13e5186a14fe3f06e", "Updated bc");
-            AsyncHttpClient client = new AsyncHttpClient();
+            //DataController dataController = new DataController(this);
+           // dataController.onCreate();
+           // dataController.updatePost("5ba54bb13e5186a14fe3f06e", "Updated bc");
+           /* AsyncHttpClient client = new AsyncHttpClient();
             RequestParams params = new RequestParams();
             client.addHeader("Authorization", "token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViYTUxMTc5OTgxNWIxNzEyM2NiOGQ3NSJ9.y5xePFWUWJB_WC7xLyQKYbJ_3JbiUTENvA1pauCmhbg");
             client.addHeader("content","BHENCHOD");
@@ -104,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
                     Log.d("MyApp", "Success");
                     Log.d("MyApp", responseString);
                 }
-            });
+            });*/
     }
 
     @Override

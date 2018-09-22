@@ -1,12 +1,9 @@
 package com.imbuegen.staffapp.fragments;
 
-import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,24 +14,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.imbuegen.staffapp.Controllers.DataController;
 import com.imbuegen.staffapp.Interfaces.fragmentCallback;
-import com.imbuegen.staffapp.JavaObjects.CommentsObject;
 import com.imbuegen.staffapp.JavaObjects.Data;
-import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
-import com.imbuegen.staffapp.JavaObjects.LikesObject;
-import com.imbuegen.staffapp.JavaObjects.PostObject;
-import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.RestClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class HomeFragment extends Fragment {
 
@@ -217,28 +203,25 @@ public class HomeFragment extends Fragment {
 
                  class clickListener implements View.OnClickListener{
                 boolean  hasLiked=false,hasDisliked=false;
+                     Data data = new Data(getContext());
 
-                    @Override
+                     @Override
                     public void onClick(View view) {
 
                         switch (view.getId()){
 
                             case R.id.post_up_button:
-                                if(!hasLiked &&!hasDisliked) {
-                                    int count1 = Integer.parseInt(thumbsUpCount.getText().toString());
-                                  /*  if (Build.VERSION.SDK_INT >= 21) {*/
-                                        thumbsUp.setBackground(getResources().getDrawable(R.drawable.ic_like_new));
-                                    thumbsUpCount.setText(Integer.toString(++count1));
-                                    hasLiked=true;
+                                try {
+                                    data.like(posts.getJSONObject(getAdapterPosition()).getString("_id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case R.id.post_down_button:
-                                if(!hasDisliked && !hasLiked) {
-                                    int count2 = Integer.parseInt(thumbsDownCount.getText().toString());
-                                    thumbsDown.setBackground(getResources().getDrawable(R.drawable.ic_thumb_down_button));
-                                    thumbsDownCount.setText(Integer.toString(++count2));
-
-                                    hasDisliked=true;
+                                try {
+                                    data.dislike(posts.getJSONObject(getAdapterPosition()).getString("_id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             case R.id.btn_comment:
