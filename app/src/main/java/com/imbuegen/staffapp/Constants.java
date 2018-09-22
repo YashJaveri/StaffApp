@@ -5,7 +5,7 @@ import java.security.PublicKey;
 public class Constants {
     public final static String BASE_URL = "http://tsec-18.herokuapp.com";
     public final static  String POST_LIST = "POST_LIST";
-    public final static String TOKEN = "token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViYTRmZDUyY2VhNmU3NWM4MWFmYzVjYyJ9.6J52iC4770C0fl8BnIvYMXgradbAsRapyw_d-DJT71w";
+    public final static String TOKEN = "token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViYTUxMTc5OTgxNWIxNzEyM2NiOGQ3NSJ9.y5xePFWUWJB_WC7xLyQKYbJ_3JbiUTENvA1pauCmhbg";
     public final static String UPDATE_POST = "UPDATE_POST";
     public final static String DELETE_POST = "DELETE_POST";
     public final static String NEW_POST = "NEW_POST";

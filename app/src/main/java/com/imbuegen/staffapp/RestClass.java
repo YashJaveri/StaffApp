@@ -27,8 +27,6 @@ public class RestClass {
         init();
     }
 
-
-
     public  interface RestListner{
         void onComplete(String jsonString);
     }
@@ -68,11 +66,12 @@ public class RestClass {
         client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                
+                Log.d("StaffApp",String.valueOf(statusCode));
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("StaffApp",responseString);
                 RestListner.onComplete(responseString);
             }
         });
@@ -95,7 +94,7 @@ public class RestClass {
         });
     }
 
-    public void deletePost(String id, final RestListner RestListner) {
+    public void deletePost(String id) {
         params = "/post/" + id + "/delete";
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Authorization",Constants.TOKEN);
@@ -107,17 +106,17 @@ public class RestClass {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                RestListner.onComplete(responseString);
+
             }
         });
     }
     public void updatePost(String _id, String content) {
         params = "/post/" + _id + "/update";
+        Log.d("MyAPP",params);
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader("Authorization",Constants.TOKEN);
-        RequestParams reqparams = new RequestParams();
-        reqparams.add("content",content);
-        client.post(Constants.BASE_URL + params, reqparams, new TextHttpResponseHandler() {
+        client.addHeader("content",content);
+        client.post(Constants.BASE_URL+params,new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 
@@ -125,7 +124,7 @@ public class RestClass {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                
+                Log.d("StaffApp","I Succeded");
             }
         });
     }
@@ -201,10 +200,9 @@ public class RestClass {
     public void newPost(String content) {
         params = "/post/new";
         AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams reqparams = new RequestParams();
-        reqparams.put("content",content);
         client.addHeader("Authorization",Constants.TOKEN);
-        client.post(Constants.BASE_URL + params,reqparams,new TextHttpResponseHandler() {
+        client.addHeader("content",content);
+        client.post(Constants.BASE_URL + params,new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 

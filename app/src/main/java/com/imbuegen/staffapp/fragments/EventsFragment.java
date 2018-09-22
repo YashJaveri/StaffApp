@@ -56,6 +56,7 @@ public class EventsFragment extends Fragment {
 
     public void initialize(){
         UserObject user = new UserObject();
+        user.setName("nishant");
         EventObject event = new EventObject();
         event.setEventDate("10/10/2010");
         event.setEventId(1);
