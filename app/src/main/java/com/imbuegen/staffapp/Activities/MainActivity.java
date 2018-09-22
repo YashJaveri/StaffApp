@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.imbuegen.staffapp.Constants;
 import com.imbuegen.staffapp.Controllers.DataController;
 import com.imbuegen.staffapp.JavaObjects.PostObject;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
@@ -24,11 +25,18 @@ import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imbuegen.staffapp.fragments.NotificationFragment;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int PROFILEREQUESTCODE=1;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -50,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("MYTAG",token);
+        //String token = FirebaseInstanceId.getInstance().getToken();
         Fragment home = new HomeFragment();
         Bundle arg = new Bundle();
         arg.putBoolean("showRelated",false);
@@ -59,10 +66,26 @@ public class MainActivity extends AppCompatActivity {
         ft.add(R.id.fragment_placeholder,home);
         ft.commit();
         //FOR TEST PURPOSE:-
-        DataController dataController = new DataController(this);
-       dataController.deletePost("5ba54bb13e5186a14fe3f06e");
-    }
+            DataController dataController = new DataController(this);
+            dataController.onCreate();
+            dataController.updatePost("5ba54bb13e5186a14fe3f06e", "Updated bc");
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
+            client.addHeader("Authorization", "token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjViYTUxMTc5OTgxNWIxNzEyM2NiOGQ3NSJ9.y5xePFWUWJB_WC7xLyQKYbJ_3JbiUTENvA1pauCmhbg");
+            client.addHeader("content","BHENCHOD");
+            client.post("http://tsec-18.herokuapp.com/post/5ba54bb13e5186a14fe3f06e/update", new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    Log.d("MyApp", "Success");
+                    Log.d("MyApp", responseString);
+                }
+            });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

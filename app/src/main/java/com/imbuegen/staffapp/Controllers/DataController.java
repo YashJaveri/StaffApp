@@ -64,15 +64,11 @@ public class DataController {
         return jsonToUser(mainJSonObject);
     }
     public void deletePost(String id) {
-        rc.deletePost(id, new RestClass.RestListner() {
-            @Override
-            public void onComplete(String _jsonString) {
-                jsonString = _jsonString;
-            }
-        });
+        rc.deletePost(id);
     }
 
     public void updatePost(String _id, String content){
+        Log.d("MYAPP",_id);
         rc.updatePost(_id, content);
     }
 
@@ -90,30 +86,37 @@ public class DataController {
             }
         });
 
-        JSONArray mainJsonArray = null;
+        //Log.d("StaffApp", "JsonObj" + jsonString);
+
+        JSONObject mainJsonObj= null;
         try {
-            mainJsonArray = new JSONArray(jsonString);
+            mainJsonObj = new JSONObject(jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (mainJsonArray != null) {
-            ArrayList<PostObject> postObjects = new ArrayList<>();
-            for (int i = 0; i < mainJsonArray.length(); i++) {
-                JSONObject jsonObject = null;
-                PostObject postObject = new PostObject();
-                try {
-                    assert jsonObject != null;
-                    postObject.set_id(jsonObject.getString("_id"));
-                    postObject.setContent(jsonObject.getString("content"));
-                    postObject.setlikeObjs(jsonToLikeObj(jsonObject.getJSONArray("likes")));
-                    postObject.setDislikeObjs(jsonToDislikeObj(jsonObject.getJSONArray("dislikes")));
-                    postObject.setComment(jsonToCommentObjs(jsonObject.getJSONArray("comments")));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        try {
+            assert mainJsonObj != null;
+            if (mainJsonObj.getJSONArray("docs") != null) {
+                ArrayList<PostObject> postObjects = new ArrayList<>();
+                for (int i = 0; i < mainJsonObj.getJSONArray("docs").length(); i++) {
+                    JSONObject jsonObject = null;
+                    PostObject postObject = new PostObject();
+                    try {
+                        assert jsonObject != null;
+                        postObject.set_id(jsonObject.getString("_id"));
+                        postObject.setContent(jsonObject.getString("content"));
+                        postObject.setlikeObjs(jsonToLikeObj(jsonObject.getJSONArray("likes")));
+                        postObject.setDislikeObjs(jsonToDislikeObj(jsonObject.getJSONArray("dislikes")));
+                        postObject.setComment(jsonToCommentObjs(jsonObject.getJSONArray("comments")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    postObjects.add(postObject);
                 }
-                postObjects.add(postObject);
+                return postObjects;
             }
-            return postObjects;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         return posts;
     }
