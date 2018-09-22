@@ -12,6 +12,7 @@ import com.imbuegen.staffapp.Constants;
 
 import com.imbuegen.staffapp.JavaObjects.CommentsObject;
 import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
+import com.imbuegen.staffapp.JavaObjects.EventObject;
 import com.imbuegen.staffapp.JavaObjects.PostObject;
 import com.imbuegen.staffapp.JavaObjects.LikesObject;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
@@ -46,11 +47,59 @@ public class DataController {
         this.context = context;
     }
 
-    public void onCreate(){
+    public void onCreate() {
         rc = new RestClass(context);
         rc.onCreate();
     }
 
+    public ArrayList<EventObject> requestEvents(String _id) {
+        ArrayList<EventObject> eventObjects = new ArrayList<>();
+
+        rc.getEvents(_id, new RestClass.RestListner() {
+            @Override
+            public void onComplete(String _jsonString) {
+                jsonString = _jsonString;
+            }
+        });
+        JSONObject mainJsonObj = null;
+        try {
+            mainJsonObj = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            assert mainJsonObj != null;
+            if (mainJsonObj.getJSONArray("docs") != null) {
+                ArrayList<PostObject> postObjects = new ArrayList<>();
+                for (int i = 0; i < mainJsonObj.getJSONArray("docs").length(); i++) {
+                    JSONObject jsonObject = null;
+                    EventObject eventObject = new EventObject();
+                    try {
+                        assert jsonObject != null;
+                        eventObject.set_id(jsonObject.getString("_id"));
+                        eventObject.setMessage(jsonObject.getString("messages"));
+                        eventObject.setEventDate(jsonObject.getString("eventDate"));
+                        eventObject.setPostDate(jsonObject.getString("postDate"));
+                        eventObject.setUser(jsonToUser(jsonObject.getJSONObject("user")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    eventObjects.add(eventObject);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return eventObjects;
+    }
+
+    public void updateEvent(String _id, String message){
+        rc.updateEvents(_id, message);
+    }
+
+    public void deleteEvent(String _id){
+        rc.deleteEvent(_id);
+    }
     public UserObject requestCurrentUser() throws JSONException {
 
         rc.getUser(new RestClass.RestListner() {
@@ -63,16 +112,17 @@ public class DataController {
 
         return jsonToUser(mainJSonObject);
     }
+
     public void deletePost(String id) {
         rc.deletePost(id);
     }
 
-    public void updatePost(String _id, String content){
-        Log.d("MYAPP",_id);
+    public void updatePost(String _id, String content) {
+        Log.d("MYAPP", _id);
         rc.updatePost(_id, content);
     }
 
-    public void  newPost(String content){
+    public void newPost(String content) {
         rc.newPost(content);
     }
 
@@ -88,7 +138,7 @@ public class DataController {
 
         //Log.d("StaffApp", "JsonObj" + jsonString);
 
-        JSONObject mainJsonObj= null;
+        JSONObject mainJsonObj = null;
         try {
             mainJsonObj = new JSONObject(jsonString);
         } catch (JSONException e) {
@@ -121,16 +171,19 @@ public class DataController {
         return posts;
     }
 
-    public void like(String _id){
+    public void like(String _id) {
         rc.likePost(_id);
     }
-    public void dislike(String _id){
+
+    public void dislike(String _id) {
         rc.dislikePost(_id);
     }
-    public void undoLike(String _id){
+
+    public void undoLike(String _id) {
         rc.undoLike(_id);
     }
-    public void undoDislike(String _id){
+
+    public void undoDislike(String _id) {
         rc.undoDislike(_id);
     }
 
@@ -206,7 +259,6 @@ public class DataController {
         userObject.setStatus(_jsonObject.getString("status"));
         userObject.setPoints(_jsonObject.getInt("points"));
         userObject.setposition(_jsonObject.getString("position"));
-
         return userObject;
     }
 }

@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textAlignment="center"
-    android:background="@color/colorPrimary">
+    android:background="#ffffff">
+
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="150dp"
@@ -20,6 +21,7 @@
         android:layout_height="50dp"
         android:layout_margin="20dp"
         android:inputType="number"
+        android:elevation="10dp"
         android:background="@drawable/rounded_button"
         android:layout_below="@id/app_icon"/>
     <EditText
@@ -30,14 +32,20 @@
         android:layout_height="50dp"
         android:layout_margin="20dp"
         android:layout_below="@id/employID"
+        android:elevation="10dp"
         android:background="@drawable/rounded_button"
         android:inputType="textPassword"/>
     <Button
+        android:id="@+id/loginButton"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
         android:layout_margin="20dp"
+        android:layout_height="60dp"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
         android:layout_below="@id/password"
-        android:backgroundTint="#c41c00"
+        android:backgroundTint="@color/colorPrimary"
         android:background="@drawable/rounded_button"
         android:text="LOGIN"/>
 </RelativeLayout>

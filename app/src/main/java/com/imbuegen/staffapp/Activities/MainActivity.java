@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        bottomNav=(BottomNavigationView)findViewById(R.id.bottom_nav);
+        bottomNav=findViewById(R.id.bottom_nav);
         bottomNav.setOnNavigationItemSelectedListener(myNavigationSelector);
 
         bottomNav.setSelectedItemId(0);
