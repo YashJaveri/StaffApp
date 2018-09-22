@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:padding="6dp">
+    android:padding="6dp"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/postTitle"
@@ -32,7 +33,7 @@
         android:text="attachments"
         android:textColor="@color/white"
         />-->
-
+<!--
     <LinearLayout
         android:id="@+id/scores"
         android:layout_marginTop="5dp"
@@ -68,13 +69,13 @@
             android:id="@+id/txt_no_thumbsDown"
             android:text="aaaaaaa"/>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/reactions_layout"
-        android:layout_below="@id/scores">
+        android:layout_below="@id/postContent">
 
         <View
             android:layout_width="0dp"
@@ -85,10 +86,17 @@
             android:id="@+id/post_up_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginBottom="2dp"
             android:background="@drawable/ic_thumb_up_black_24dp"
             />
 
-        
+        <TextView
+            android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_no_thumbsUp"
+            android:text="aaaaaaa"/>
 
         <View
             android:layout_width="0dp"
@@ -99,8 +107,16 @@
             android:id="@+id/post_down_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginTop="2dp"
             android:background="@drawable/ic_thumb_down_black_24dp"
      />
+        <TextView
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_no_thumbsDown"
+            android:text="aaaaaaa"/>
 
 
         <View
