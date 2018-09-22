@@ -59,20 +59,13 @@ public class EventsFragment extends Fragment {
         user.setName("nishant");
         EventObject event = new EventObject();
         event.setEventDate("10/10/2010");
-        event.setEventId(1);
         event.setPostDate("1/1/2010");
         event.setUser(user);
         event.setMessage("come to my party bitch");
 
         eventsList.add(event);
-
-        event.setEventId(2);
+        eventsList.add(event);;
         eventsList.add(event);
-
-        event.setEventId(3);
-        eventsList.add(event);
-
-        event.setEventId(4);
         eventsList.add(event);
     }
 

@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.imbuegen.staffapp.JavaObjects.EventObject;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RestClass {
     private Context context;
@@ -27,9 +29,10 @@ public class RestClass {
         init();
     }
 
-    public  interface RestListner{
+    public interface RestListner {
         void onComplete(String jsonString);
     }
+
     private void init() {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -37,6 +40,23 @@ public class RestClass {
             Log.d("StaffApp", "Got HashCode: " + hashCode);
         else
             Log.d("StaffApp", "Not got");
+    }
+
+    public void getUser(final RestListner RestListner) {
+        params = "/user/";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                RestListner.onComplete(responseString);
+            }
+        });
     }
 
     protected void setHashCode(String _hashCode) {
@@ -58,37 +78,74 @@ public class RestClass {
             return false;
     }
 
-    public void getPosts(int id, final RestListner RestListner) {
-        params = "/post/list/" + String.valueOf(id);
-        Log.d("StaffApp", "GetPost Post get req");
+    public void getEvents(String _id, final RestListner RestListner) {
+        params = "/event/list" + String.valueOf(_id);
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN );
+        client.addHeader("Authorization", Constants.TOKEN);
         client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("StaffApp",String.valueOf(statusCode));
+                Log.d("StaffApp", String.valueOf(statusCode));
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.d("StaffApp",responseString);
+                Log.d("StaffApp", responseString);
                 RestListner.onComplete(responseString);
             }
         });
     }
 
-    public void getUser(final RestListner RestListner) {
-        params = "/user/";
+    public void updateEvents(String _id, String message) {
+        params = "/event/" + _id + "/update";
+        Log.d("MyAPP", params);
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
-        client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.addHeader("content", message);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("StaffApp", "I Succeded");
+            }
+        });
+    }
+
+    public void deleteEvent(String _id) {
+        params = "/event/" + _id + "/delete";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        });
+    }
+
+    public void getPosts(int id, final RestListner RestListner) {
+        params = "/post/list/" + String.valueOf(id);
+        Log.d("StaffApp", "GetPost Post get req");
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("StaffApp", String.valueOf(statusCode));
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("StaffApp", responseString);
                 RestListner.onComplete(responseString);
             }
         });
@@ -97,11 +154,11 @@ public class RestClass {
     public void deletePost(String id) {
         params = "/post/" + id + "/delete";
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
+        client.addHeader("Authorization", Constants.TOKEN);
         client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                
+
             }
 
             @Override
@@ -110,21 +167,22 @@ public class RestClass {
             }
         });
     }
+
     public void updatePost(String _id, String content) {
         params = "/post/" + _id + "/update";
-        Log.d("MyAPP",params);
+        Log.d("MyAPP", params);
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
-        client.addHeader("content",content);
-        client.post(Constants.BASE_URL+params,new TextHttpResponseHandler() {
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.addHeader("content", content);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Log.d("StaffApp","I Succeded");
+                Log.d("StaffApp", "I Succeded");
             }
         });
     }
@@ -132,16 +190,16 @@ public class RestClass {
     public void likePost(String _id) {
         params = "/post/" + _id + "/like";
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
+        client.addHeader("Authorization", Constants.TOKEN);
         client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                
+
             }
         });
     }
@@ -149,7 +207,7 @@ public class RestClass {
     public void dislikePost(String _id) {
         params = "/post/" + _id + "/dislike";
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
+        client.addHeader("Authorization", Constants.TOKEN);
         client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -166,7 +224,7 @@ public class RestClass {
     public void undoLike(String _id) {
         params = "/post/" + _id + "/undolike";
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
+        client.addHeader("Authorization", Constants.TOKEN);
         client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -183,7 +241,7 @@ public class RestClass {
     public void undoDislike(String _id) {
         params = "/post/" + _id + "/undodislike";
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
+        client.addHeader("Authorization", Constants.TOKEN);
         client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -200,9 +258,9 @@ public class RestClass {
     public void newPost(String content) {
         params = "/post/new";
         AsyncHttpClient client = new AsyncHttpClient();
-        client.addHeader("Authorization",Constants.TOKEN);
-        client.addHeader("content",content);
-        client.post(Constants.BASE_URL + params,new TextHttpResponseHandler() {
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.addHeader("content", content);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
 
@@ -210,7 +268,7 @@ public class RestClass {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                
+
             }
         });
     }
