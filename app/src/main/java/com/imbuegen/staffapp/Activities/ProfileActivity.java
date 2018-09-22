@@ -13,12 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
+import com.imbuegen.staffapp.fragments.CommentsFragment;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 
-public class ProfileActivity extends AppCompatActivity  implements View.OnClickListener{
+public class ProfileActivity extends AppCompatActivity  implements fragmentCallback{
     ImageView profilePic;
     BottomNavigationView tabsNav;
     FragmentManager fragmentManager;
@@ -80,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity  implements View.OnClickL
         }else{
             anniv.setVisibility(View.GONE);
         }
-        
+
         email.setText(user.getEmail());
         joiningDate.setText(user.getJoiningDate());
         department.setText(user.getDepartment());
@@ -120,8 +122,12 @@ public class ProfileActivity extends AppCompatActivity  implements View.OnClickL
         }
     };
 
+
     @Override
-    public void onClick(View view) {
-        Toast.makeText(this, "thumbs up!!!", Toast.LENGTH_SHORT).show();
+    public void showComments() {
+        Fragment comments = new CommentsFragment();
+        FragmentTransaction ft =fragmentManager.beginTransaction();
+        ft.replace(R.id.view_fragment_holder,comments);
+        ft.commit();
     }
 }

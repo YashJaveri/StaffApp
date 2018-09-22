@@ -47,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
         fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("MYTAG",token);
+       /* String token = FirebaseInstanceId.getInstance().getToken();*/
+        /*Log.d("MYTAG",token);*/
         Fragment home = new HomeFragment();
         Bundle arg = new Bundle();
         arg.putBoolean("showRelated",false);
