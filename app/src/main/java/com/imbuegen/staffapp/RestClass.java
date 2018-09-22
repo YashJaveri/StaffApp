@@ -27,8 +27,8 @@ public class RestClass {
         init();
     }
 
-    public  interface RestListner{
-        void onComplete(String jsonString);
+    public  interface RestListner<T>{
+        void onComplete(T jsonString);
     }
     private void init() {
         mSharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -58,7 +58,7 @@ public class RestClass {
             return false;
     }
 
-    public void getPosts(int id, final RestListner RestListner) {
+    public void getPosts(int id, final RestListner<String> RestListner) {
         params = "/post/list/" + String.valueOf(id);
         Log.d("StaffApp", "GetPost Post get req");
         AsyncHttpClient client = new AsyncHttpClient();
@@ -214,5 +214,57 @@ public class RestClass {
             }
         });
     }
+    public void getEvents(int _id, final RestListner RestListner) {
+        params = "/event/list" + String.valueOf(_id);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.get(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("StaffApp", String.valueOf(statusCode));
+            }
 
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("StaffApp", responseString);
+                RestListner.onComplete(responseString);
+            }
+        });
+    }
+
+    public void updateEvents(String _id, String message) {
+        params = "/event/" + _id + "/update";
+        Log.d("MyAPP", params);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.addHeader("content", message);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                Log.d("StaffApp", "I Succeded");
+            }
+        });
+    }
+
+    public void deleteEvent(String _id) {
+        params = "/event/" + _id + "/delete";
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", Constants.TOKEN);
+        client.post(Constants.BASE_URL + params, new TextHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+
+            }
+        });
+    }
 }

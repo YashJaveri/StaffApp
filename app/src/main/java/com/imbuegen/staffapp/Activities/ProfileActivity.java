@@ -20,10 +20,15 @@ import com.imbuegen.staffapp.fragments.CommentsFragment;
 import com.imbuegen.staffapp.fragments.EventsFragment;
 import com.imbuegen.staffapp.fragments.HomeFragment;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ProfileActivity extends AppCompatActivity  implements fragmentCallback{
     ImageView profilePic;
     BottomNavigationView tabsNav;
     FragmentManager fragmentManager;
+
+    UserObject user;
 
     TextView name,email,points,DoB,anniv,joiningDate,department,position;
 
@@ -31,6 +36,12 @@ public class ProfileActivity extends AppCompatActivity  implements fragmentCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        if(getIntent().hasExtra("user")) {
+            user = (UserObject) getIntent().getSerializableExtra("user");
+        }else{
+            initialize();
+        }
 
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -50,28 +61,7 @@ public class ProfileActivity extends AppCompatActivity  implements fragmentCallb
         position=(TextView)findViewById(R.id.view_position);
         email=(TextView)findViewById(R.id.view_email);
 
-        initialize();
-
-        Fragment home = new HomeFragment();
-        Bundle arg = new Bundle();
-        arg.putBoolean("showRelated",true);
-        home.setArguments(arg);
-        ft.add(R.id.view_fragment_holder,home);
-        ft.commit();
-    }
-
-    public void initialize(){
-
-        UserObject user=new UserObject();
-        user.setName("yash");
-        user.setEmployeeID(1);
-        user.setAnnivDATE("10/10/2000");
-        user.setDepartment("IT Department");
-        user.setDOB("1/1/2010");
-        user.setEmail("ekNoZhatu@gmail.com");
-        user.setPoints(19);
-        user.setStatus("Married");
-        user.setposition("developer");
+      // initialize();
 
         name.setText(user.getName());
         points.setText(Integer.toString(user.getPoints()));
@@ -87,6 +77,30 @@ public class ProfileActivity extends AppCompatActivity  implements fragmentCallb
         joiningDate.setText(user.getJoiningDate());
         department.setText(user.getDepartment());
         position.setText(user.getposition());
+
+        Fragment home = new HomeFragment();
+        Bundle arg = new Bundle();
+        arg.putBoolean("showRelated",true);
+        home.setArguments(arg);
+        ft.add(R.id.view_fragment_holder,home);
+        ft.commit();
+    }
+
+    public void initialize(){
+
+        UserObject user=new UserObject();
+        user.setName("yash");
+        user.setEmployeeID(1);
+        user.setAnnivDATE("10/10/2000");
+        user.setJoiningDate("2/2/2010");
+        user.setDepartment("IT Department");
+        user.setDOB("1/1/2010");
+        user.setEmail("ekNoZhatu@gmail.com");
+        user.setPoints(19);
+        user.setStatus("married");
+        user.setposition("developer");
+
+
 
     }
 
@@ -124,10 +138,18 @@ public class ProfileActivity extends AppCompatActivity  implements fragmentCallb
 
 
     @Override
-    public void showComments() {
+    public void showComments(JSONArray commantrr) {
         Fragment comments = new CommentsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("comments",commantrr.toString());
+        comments.setArguments(bundle);
         FragmentTransaction ft =fragmentManager.beginTransaction();
-        ft.replace(R.id.view_fragment_holder,comments);
+        ft.replace(R.id.fragment_placeholder,comments);
         ft.commit();
+    }
+
+    @Override
+    public void showUser(JSONObject user) {
+
     }
 }

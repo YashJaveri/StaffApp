@@ -12,6 +12,7 @@ import com.imbuegen.staffapp.Constants;
 
 import com.imbuegen.staffapp.JavaObjects.CommentsObject;
 import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
+import com.imbuegen.staffapp.JavaObjects.EventObject;
 import com.imbuegen.staffapp.JavaObjects.PostObject;
 import com.imbuegen.staffapp.JavaObjects.LikesObject;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
@@ -51,17 +52,21 @@ public class DataController {
         rc.onCreate();
     }
 
-    public UserObject requestCurrentUser() throws JSONException {
+    public void requestCurrentUser(final RestClass.RestListner<UserObject> User) throws JSONException {
 
-        rc.getUser(new RestClass.RestListner() {
+        rc.getUser(new RestClass.RestListner<String>() {
             @Override
             public void onComplete(String _jsonString) {
+                try {
                 jsonString = _jsonString;
+                JSONObject mainJSonObject = new JSONObject(_jsonString);
+                User.onComplete(jsonToUser(mainJSonObject));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        JSONObject mainJSonObject = new JSONObject(jsonString);
 
-        return jsonToUser(mainJSonObject);
     }
     public void deletePost(String id) {
         rc.deletePost(id);
@@ -76,49 +81,52 @@ public class DataController {
         rc.newPost(content);
     }
 
-    public ArrayList<PostObject> requestPosts(int id) {
+    public void requestPosts(int id, final RestClass.RestListner<ArrayList<PostObject>> listner) {
 
 
-        rc.getPosts(id, new RestClass.RestListner() {
+        rc.getPosts(id, new RestClass.RestListner<String>() {
             @Override
             public void onComplete(String _jsonString) {
-                jsonString = _jsonString;
+                JSONObject mainJsonObj= null;
+                Log.d("HJAPP",_jsonString);
+                try {
+                    mainJsonObj = new JSONObject(_jsonString);
+                    Log.d("HJAPP",mainJsonObj.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    assert mainJsonObj != null;
+                    if (mainJsonObj.getJSONArray("docs") != null) {
+                        ArrayList<PostObject> postObjects = new ArrayList<>();
+                        JSONArray jsonArray = mainJsonObj.getJSONArray("docs");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            PostObject postObject = new PostObject();
+                            try {
+                                assert jsonObject != null;
+                                postObject.set_id(jsonObject.getString("_id"));
+                                postObject.setUser(jsonToUser(jsonObject.getJSONObject("user")));
+                                postObject.setContent(jsonObject.getString("content"));
+                                postObject.setlikeObjs(jsonToLikeObj(jsonObject.getJSONArray("likes")));
+                                postObject.setDislikeObjs(jsonToDislikeObj(jsonObject.getJSONArray("dislikes")));
+                                postObject.setComment(jsonToCommentObjs(jsonObject.getJSONArray("comments")));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            postObjects.add(postObject);
+                        }
+                        listner.onComplete(postObjects);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        //Log.d("StaffApp", "JsonObj" + jsonString);
+        Log.d("StaffApp", "JsonObj" + jsonString);
 
-        JSONObject mainJsonObj= null;
-        try {
-            mainJsonObj = new JSONObject(jsonString);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            assert mainJsonObj != null;
-            if (mainJsonObj.getJSONArray("docs") != null) {
-                ArrayList<PostObject> postObjects = new ArrayList<>();
-                for (int i = 0; i < mainJsonObj.getJSONArray("docs").length(); i++) {
-                    JSONObject jsonObject = null;
-                    PostObject postObject = new PostObject();
-                    try {
-                        assert jsonObject != null;
-                        postObject.set_id(jsonObject.getString("_id"));
-                        postObject.setContent(jsonObject.getString("content"));
-                        postObject.setlikeObjs(jsonToLikeObj(jsonObject.getJSONArray("likes")));
-                        postObject.setDislikeObjs(jsonToDislikeObj(jsonObject.getJSONArray("dislikes")));
-                        postObject.setComment(jsonToCommentObjs(jsonObject.getJSONArray("comments")));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    postObjects.add(postObject);
-                }
-                return postObjects;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return posts;
+
     }
 
     public void like(String _id){
@@ -192,21 +200,79 @@ public class DataController {
     private UserObject jsonToUser(JSONObject _jsonObject) throws JSONException {
         UserObject userObject = new UserObject();
 
-        userObject.setEmployeeID(_jsonObject.getInt("employId"));
-        userObject.setName("");
+        userObject.setEmployeeID(_jsonObject.getInt("employID"));
+        Log.d("1 dob", _jsonObject.toString());
+        userObject.setName(_jsonObject.getString("name"));
         userObject.setEmail(_jsonObject.getString("email"));
         userObject.setAnnivDATE(_jsonObject.getString("aniversaryDate"));
+
         userObject.setDOB(_jsonObject.getString("DOB"));
         userObject.setDepartment(_jsonObject.getString("department"));
+        Log.d("2 dep", _jsonObject.toString());
         ArrayList<String> familyemailsArray = new ArrayList<>();
         for (int i = 0; i < _jsonObject.getString("familyEmails").length(); i++)
             familyemailsArray.add(_jsonObject.getJSONArray("familyEmails").get(i).toString());
         userObject.setFamilyEmails(familyemailsArray);
+        Log.d("3 fa", _jsonObject.toString());
         userObject.setJoiningDate(_jsonObject.getString("joiningDate"));
+        Log.d("4 jnDte", _jsonObject.toString());
         userObject.setStatus(_jsonObject.getString("status"));
+        Log.d("5 status", _jsonObject.toString());
         userObject.setPoints(_jsonObject.getInt("points"));
+        Log.d("6 points", _jsonObject.toString());
         userObject.setposition(_jsonObject.getString("position"));
+        Log.d("7 pos", _jsonObject.toString());
 
+        Log.d("StaffAppFn", userObject.toString());
         return userObject;
+    }
+    public void requestEvents(int _id, final RestClass.RestListner<ArrayList<EventObject>> onEvent) {
+        final ArrayList<EventObject> eventObjects = new ArrayList<>();
+
+        rc.getEvents(_id, new RestClass.RestListner<String>() {
+            @Override
+            public void onComplete(String _jsonString) {
+                jsonString = _jsonString;
+                JSONObject mainJsonObj = null;
+                try {
+                    mainJsonObj = new JSONObject(_jsonString);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    assert mainJsonObj != null;
+                    if (mainJsonObj.getJSONArray("docs") != null) {
+                        ArrayList<PostObject> postObjects = new ArrayList<>();
+                        for (int i = 0; i < mainJsonObj.getJSONArray("docs").length(); i++) {
+                            JSONObject jsonObject = null;
+                            EventObject eventObject = new EventObject();
+                            try {
+                                assert jsonObject != null;
+                                eventObject.set_id(jsonObject.getString("_id"));
+                                eventObject.setMessage(jsonObject.getString("messages"));
+                                eventObject.setEventDate(jsonObject.getString("eventDate"));
+                                eventObject.setPostDate(jsonObject.getString("postDate"));
+                                eventObject.setUser(jsonToUser(jsonObject.getJSONObject("user")));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            eventObjects.add(eventObject);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                onEvent.onComplete(eventObjects);
+            }
+        });
+
+    }
+
+    public void updateEvent(String _id, String message){
+        rc.updateEvents(_id, message);
+    }
+
+    public void deleteEvent(String _id){
+        rc.deleteEvent(_id);
     }
 }

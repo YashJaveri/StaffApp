@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -14,12 +15,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.Toast;
 
 import com.imbuegen.staffapp.Constants;
 import com.imbuegen.staffapp.Controllers.DataController;
 
 import com.imbuegen.staffapp.Interfaces.fragmentCallback;
+import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 import com.imbuegen.staffapp.fragments.CommentsFragment;
 import com.imbuegen.staffapp.fragments.EventsFragment;
@@ -31,7 +34,9 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -43,8 +48,10 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
 
     BottomNavigationView bottomNav;
     FragmentManager fragmentManager;
+    FloatingActionButton fab;
 
-    public static final int PROFILEREQUESTCODE=1;
+    public static final int PROFILE_REQUEST_CODE=1;
+    public static final int EDITIOR_REQUEST_CODE=2;
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
@@ -56,6 +63,16 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
         bottomNav.setSelectedItemId(0);
 
         fragmentManager = getSupportFragmentManager();
+
+        fab=(FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //start post editior
+                Intent i = new Intent(MainActivity.this,PageEditiorActivity.class);
+                startActivityForResult(i,EDITIOR_REQUEST_CODE);
+            }
+        });
 
         FragmentTransaction ft = fragmentManager.beginTransaction();
         Fragment home = new HomeFragment();
@@ -89,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.menu_activity_main,menu);
+       /* MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.menu_activity_main,menu);*/
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -100,7 +117,11 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
         if(item.getItemId()==R.id.user_profile){
             //start an profile activity here
             Intent intent=new Intent(MainActivity.this,ProfileActivity.class);
-            startActivityForResult(intent,PROFILEREQUESTCODE);
+           // Bundle bundle = new Bundle();
+
+            //pass the current user
+          //  bundle.putSerializable("user",user);
+            startActivityForResult(intent,PROFILE_REQUEST_CODE);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,10 +168,23 @@ public class MainActivity extends AppCompatActivity implements fragmentCallback 
     };
 
     @Override
-    public void showComments() {
+    public void showComments(JSONArray commentarr) {
         Fragment comments = new CommentsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("comments",commentarr.toString());
+        comments.setArguments(bundle);
         FragmentTransaction ft =fragmentManager.beginTransaction();
         ft.replace(R.id.fragment_placeholder,comments);
         ft.commit();
     }
+
+    @Override
+    public void showUser(JSONObject user) {
+        Intent intent = new Intent(MainActivity.this,ProfileActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("user",user.toString());
+        startActivityForResult(intent,PROFILE_REQUEST_CODE,bundle);
+    }
+
+
 }

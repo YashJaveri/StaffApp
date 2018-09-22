@@ -1,9 +1,10 @@
 package com.imbuegen.staffapp.JavaObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class UserObject {
+public class UserObject implements Serializable{
     private int employeeID;
     private String name;
     private String email;

@@ -16,13 +16,16 @@ import com.imbuegen.staffapp.JavaObjects.EventObject;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 
 public class EventsFragment extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerView.Adapter myAdapter;
-    ArrayList<EventObject> eventsList;
+    JSONArray eventsList;
     boolean showRelated;
 
 
@@ -40,10 +43,10 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        eventsList=new ArrayList<>();
+        eventsList=new JSONArray();
         recyclerView =(RecyclerView)view.findViewById(R.id.events_recyclerView);
 
-        initialize();
+        //initialize();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         myAdapter =new eventAdapter();
@@ -59,21 +62,9 @@ public class EventsFragment extends Fragment {
         user.setName("nishant");
         EventObject event = new EventObject();
         event.setEventDate("10/10/2010");
-        event.setEventId(1);
         event.setPostDate("1/1/2010");
         event.setUser(user);
         event.setMessage("come to my party bitch");
-
-        eventsList.add(event);
-
-        event.setEventId(2);
-        eventsList.add(event);
-
-        event.setEventId(3);
-        eventsList.add(event);
-
-        event.setEventId(4);
-        eventsList.add(event);
     }
 
 
@@ -90,12 +81,13 @@ public class EventsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull myViewholder holder, int position) {
-            EventObject currentEvent = eventsList.get(position);
-
-            holder.eventMessage.setText(currentEvent.getMessage());
-            holder.eventDate.setText(currentEvent.getEventDate());
-            holder.name.setText(currentEvent.getUser().getName());
-
+            try {
+                holder.eventMessage.setText(eventsList.getJSONObject(position).getString("message"));
+                holder.eventDate.setText(eventsList.getJSONObject(position).getString("eventDate"));
+                holder.name.setText(eventsList.getJSONObject(position).getJSONObject("user").getString("name"));
+            }catch (JSONException ex){
+                ex.printStackTrace();
+            }
             //todo
             //set the image of the user here with glide
 
@@ -105,7 +97,7 @@ public class EventsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return eventsList.size();
+            return eventsList.length();
         }
 
         public class myViewholder extends RecyclerView.ViewHolder{

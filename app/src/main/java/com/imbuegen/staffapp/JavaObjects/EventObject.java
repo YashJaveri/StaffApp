@@ -7,7 +7,7 @@ public class EventObject {
     private String eventDate;
     private String postDate;
     private String message;
-    private int eventId;
+    private String _id;
 
     public UserObject getUser() {
         return user;
@@ -41,11 +41,11 @@ public class EventObject {
         this.message = message;
     }
 
-    public int getEventId() {
-        return eventId;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
+    public String get_id() {
+        return _id;
     }
 }

@@ -17,13 +17,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.imbuegen.staffapp.Controllers.DataController;
 import com.imbuegen.staffapp.Interfaces.fragmentCallback;
 import com.imbuegen.staffapp.JavaObjects.CommentsObject;
+import com.imbuegen.staffapp.JavaObjects.Data;
 import com.imbuegen.staffapp.JavaObjects.DisLikesObject;
 import com.imbuegen.staffapp.JavaObjects.LikesObject;
 import com.imbuegen.staffapp.JavaObjects.PostObject;
 import com.imbuegen.staffapp.JavaObjects.UserObject;
 import com.imbuegen.staffapp.R;
+import com.imbuegen.staffapp.RestClass;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -33,10 +40,12 @@ public class HomeFragment extends Fragment {
 
     private static final String TAG = "HomeFragment";
     RecyclerView recyclerView;
-    ArrayList<PostObject> posts;
+    JSONArray posts;
     RecyclerView.Adapter myAdapter;
     fragmentCallback callback;
     boolean showRelated;
+    Data dataController;
+    int page=1;
 
 
     boolean isLoading=false;         //specifies whether request is being processed
@@ -64,9 +73,9 @@ public class HomeFragment extends Fragment {
 
         this.callback=(fragmentCallback) getActivity();
 
-        posts=new ArrayList<>();
+        posts=new JSONArray();
 
-        initializeDummy();
+        //initializeDummy();
 
         final LinearLayoutManager layoutManager =new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -76,15 +85,29 @@ public class HomeFragment extends Fragment {
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
+        dataController = new Data(getContext());
         myAdapter = new homeAdapter();
         recyclerView.setAdapter(myAdapter);
+        dataController.init();
+        dataController.getPosts(page++, new RestClass.RestListner<JSONArray>() {
+            @Override
+            public void onComplete(JSONArray jsonString) {
+                Log.d("ONCP",jsonString.toString());
+                posts  = jsonString;
+                Log.d("HAJAM",posts.toString());
+                myAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+
 
         //todo
         //on scroll listener
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+       /* recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull final RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
 
@@ -106,7 +129,13 @@ public class HomeFragment extends Fragment {
                     if(!isLoading&&(!isEnd)){
                         //request new data here
                         //with incremented page number
-
+                        dataController.requestPosts(page++, new RestClass.RestListner<ArrayList<PostObject>>() {
+                            @Override
+                            public void onComplete(ArrayList<PostObject> jsonString) {
+                                posts.addAll(jsonString);
+                                myAdapter.notifyDataSetChanged();
+                            }
+                        });
 
 
                         if(posts.size()>oldListsize) {
@@ -118,7 +147,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
             }
-        });
+        });*/
 
 
 
@@ -126,47 +155,6 @@ public class HomeFragment extends Fragment {
 
 
     }
-
-
-
-public void initializeDummy(){
-
-
-    UserObject user = new UserObject();
-    user.setName("user one");
-    user.setEmployeeID(1);
-
-    PostObject post = new PostObject();
-
-    post.set_id("1");
-    post.setContent("dummy post content");
-    post.setUser(user);
-
-    ArrayList<LikesObject> likeList = new ArrayList<>();
-    likeList.add(new LikesObject(user.getEmployeeID()));
-
-    ArrayList<DisLikesObject> disLikeList = new ArrayList<>();
-    disLikeList.add(new DisLikesObject(user.getEmployeeID()));
-
-    ArrayList<CommentsObject> commentList= new ArrayList<>();
-    commentList.add(new CommentsObject(user,"dummey comment"));
-
-    post.setlikeObjs(likeList);
-    post.setDislikeObjs(disLikeList);
-    post.setComment(commentList);
-
-    posts.add(post);
-    posts.add(post);
-    posts.add(post);
-    posts.add(post);
-    posts.add(post);
-    posts.add(post);
-    posts.add(post);
-
-
-
-}
-
 
     public class homeAdapter extends RecyclerView.Adapter<homeAdapter.myViewHolder>{
 
@@ -180,24 +168,28 @@ public void initializeDummy(){
 
         @Override
         public void onBindViewHolder(@NonNull homeAdapter.myViewHolder holder, int i) {
-            PostObject currentobject =posts.get(i);
-
-            holder.postTitle.setText(currentobject.getUser().getName());
-           holder.postContent.setText(currentobject.getContent());
-           holder.thumbsUpCount.setText(Integer.toString(currentobject.getlikeObjss().size()));
-           holder.thumbsDownCount.setText(Integer.toString(currentobject.getDislikeObjs().size()));
+            try {
+                Log.d("post",posts.getJSONObject(i).getJSONObject("user").getString("name"));
+                holder.postTitle.setText(posts.getJSONObject(i).getJSONObject("user").getString("name"));
+                holder.postContent.setText(posts.getJSONObject(i).getString("content"));
+                holder.thumbsUpCount.setText(posts.getJSONObject(i).getJSONArray("likes").length());
+                holder.thumbsDownCount.setText(posts.getJSONObject(i).getJSONArray("dislikes").length());
+            }catch (JSONException ex){
+                ex.printStackTrace();
+            }
+           //if currentobject = the loged in user we show the edit button
 
         }
 
         @Override
         public int getItemCount() {
-            return posts.size();
+            return posts.length();
         }
 
         public class myViewHolder extends RecyclerView.ViewHolder{
 
             TextView postTitle,postContent,thumbsUpCount,thumbsDownCount;
-            Button  thumbsUp,thumbsDown,comment;
+            Button  thumbsUp,thumbsDown,comment,edit;
 
 
             public myViewHolder(@NonNull View itemView) {
@@ -211,12 +203,16 @@ public void initializeDummy(){
                 thumbsUp = (Button) itemView.findViewById(R.id.post_up_button);
                 thumbsDown = (Button) itemView.findViewById(R.id.post_down_button);
                 comment = (Button) itemView.findViewById(R.id.btn_comment);
+                edit = (Button) itemView.findViewById(R.id.btn_edit_post);
 
                 //setting on Click listeners
                 clickListener listener = new clickListener();
                 thumbsUp.setOnClickListener(listener);
                 thumbsDown.setOnClickListener(listener);
                 comment.setOnClickListener(listener);
+                edit.setOnClickListener(listener);
+                postTitle.setOnClickListener(listener);
+
             }
 
                  class clickListener implements View.OnClickListener{
@@ -248,9 +244,26 @@ public void initializeDummy(){
                             case R.id.btn_comment:
                                 //todo
                                 //start comment fragment here
-                                callback.showComments();
+                                try {
+                                    callback.showComments(posts.getJSONObject(getAdapterPosition()).getJSONArray("comments"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                                 break;
+
+                            case R.id.btn_edit_post:
+
+                                break;
+
+                            case R.id.postTitle:
+                                try {
+                                    callback.showUser(posts.getJSONObject(getAdapterPosition()).getJSONObject("user"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+
                         }
                     }
                 }
