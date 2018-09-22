@@ -1,5 +1,6 @@
 package com.imbuegen.staffapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -42,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, String responseString) {
                         Toast.makeText(getApplicationContext(),"LoggedIn",Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
                         Log.d("USER",responseString);
                     }
                 });
